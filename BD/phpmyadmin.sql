@@ -1,6 +1,6 @@
 
 USE e20160018322;
-
+-- test
 DROP table if exists USER;
 DROP table if exists EVENTS;
 DROP table if exists LOCATIONS;
