@@ -76,7 +76,10 @@
           <p>Money Money.</p>
         </div>      
       </div> -->
-      <img src="img/crowd.jpg" class="img-thumbnail">
+      <!-- <div class="container-fluid">
+        
+      </div> -->
+      <img src="img/crowd.jpg" class="img-thumbnail" width = 100px>
 
       <!-- <div class="item">
         <img src="https://placehold.it/1200x400?text=Another Image Maybe" alt="Image">
@@ -95,8 +98,15 @@
     <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
       <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
       <span class="sr-only">Next</span>
-    </a> -->
+    </a> 
 </div>
+-->
+<section class = "row">
+<div class="col-lg-12">
+map
+</div>
+
+</section>
   
 <div class="container text-center">    
   <h3>What We Do</h3><br>

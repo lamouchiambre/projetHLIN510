@@ -1,12 +1,13 @@
 
 USE e20160018322;
--- test
+/*test*/
+DROP table if exists REGISTER;
+DROP table if exists RATE;
 DROP table if exists USER;
 DROP table if exists EVENTS;
 DROP table if exists LOCATIONS;
 DROP table if exists THEME;
-DROP table if exists REGISTER;
-DROP table if exists RATE;
+
 
 create table USER(
     us_id NUMERIC(10) NOT NULL,
