@@ -1,7 +1,12 @@
 -- DROP DATABASE IF EXSIST 
---USE e
+USE e20160018322
 -- Creation des tables
 DROP table if exists USER;
+DROP table if exists EVENT;
+DROP table if exists LOCATION;
+DROP table if exists THEME;
+DROP table if exists REGISTER;
+DROP table if exists RATE;
 
 --table USER
 create table USER(
