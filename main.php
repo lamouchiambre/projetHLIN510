@@ -1,41 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Page d'acceuil</title>
+  <title>Site événementiel d'Alexambre</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <style>
-    /* Remove the navbar's default margin-bottom and rounded borders */ 
+
+    body { 
+      margin:0;
+      padding:0;
+      background: url(img/crowd.jpg) no-repeat center fixed; 
+      -webkit-background-size: cover; 
+      background-size: cover;
+    }
     .navbar {
       margin-bottom: 0;
       border-radius: 0;
+      background-color: rgba(0, 0, 0, 1);  
+      font-size: 70;
     }
-    
-    /* Add a gray background color and some padding to the footer */
+    .nav {
+      margin-bottom: 0;
+      border-radius: 0;
+      background-color: rgba(150, 0, 75, 0.5);  
+      font-size: 70;
+    }
+    .nav a {
+      color: white;
+      font-size: 20;
+    }
     footer {
-      background-color: #f2f2aa;
+      background-color: rgba(0, 0, 0, 0.8);
       padding: 25px;
+      color: white;
     }
-    
-  .carousel-inner img {
-      width: 100%; /* Set width to 100% */
-      margin: auto;
-      min-height:200px;
-  }
+    .logo {
+      width: 60%;
+    }
+    #footer {
+      width-min: 100%;
+    }
 
-  /* Hide the carousel text when the screen is less than 600 pixels wide */
-  @media (max-width: 600px) {
-    .carousel-caption {
-      display: none; 
-    }
-  }
   </style>
 </head>
 <body>
 
+<!-- Début du menu -->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -44,14 +57,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#">Logo</a>
+      <img class="logo" src="img/logoMtp.png">
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Contact</a></li>
+        <li class="active"><a href="#">Acceuil</a></li>
+        <li><a href="#">A propos</a></li>
+        <li><a href="#">Nous contacter</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -59,80 +71,25 @@
     </div>
   </div>
 </nav>
+<!-- Fin du menu -->
 
-<!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-    </ol> -->
-
-    <!-- Wrapper for slides -->
-    <!-- <div class="carousel-inner" role="listbox">
-      <div class="item active">
-        <img src="img/crowd.jpg" alt="Image">
-        <div class="carousel-caption">
-          <h3>Sell $</h3>
-          <p>Money Money.</p>
-        </div>      
-      </div> -->
-      <!-- <div class="container-fluid">
-        
-      </div> -->
-      <img src="img/crowd.jpg" class="img-thumbnail" width = 100px>
-
-      <!-- <div class="item">
-        <img src="https://placehold.it/1200x400?text=Another Image Maybe" alt="Image">
-        <div class="carousel-caption">
-          <h3>More Sell $</h3>
-          <p>Lorem ipsum...</p>
-        </div>      
-      </div>
-    </div> -->
-
-    <!-- Left and right controls -->
-    <!-- <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a> 
+<!-- Début de la map -->
+<div class="bloc" id="map">
+  [Open map]
 </div>
--->
-<section class = "row">
-<div class="col-lg-12">
-map
+<!-- Fin de la map -->
+
+<!-- Début de la liste des événements -->
+<div class="bloc" id="listEvents">
+  [Liste des événements]
 </div>
+<!-- Fin de la liste des événements -->
 
-</section>
-  
-<div class="container text-center">    
-  <h3>What We Do</h3><br>
-  <div class="row">
-    <div class="col-sm-4">
-      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
-      <p>Current Project</p>
-    </div>
-    <div class="col-sm-4"> 
-      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
-      <p>Project 2</p>    
-    </div>
-    <div class="col-sm-4">
-      <div class="well">
-       <p>Some text..</p>
-      </div>
-      <div class="well">
-       <p>Some text..</p>
-      </div>
-    </div>
-  </div>
-</div><br>
-
-<footer class="container-fluid text-center">
-  <p>Footer Text</p>
+<!-- Début du footer -->
+<footer class="container-fluid text-center" id="footer">
+  <p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
 </footer>
+<!-- Fin du Footer -->
 
 </body>
 </html>
