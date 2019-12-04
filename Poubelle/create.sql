@@ -1,15 +1,15 @@
 -- DROP DATABASE IF EXSIST 
 USE e20160018322
 -- Creation des tables
-DROP table if exists USER;
-DROP table if exists EVENT;
-DROP table if exists LOCATION;
-DROP table if exists THEME;
-DROP table if exists REGISTER;
-DROP table if exists RATE;
+DROP TABLE IF EXISTS USER;
+DROP TABLE IF EXISTS EVENT;
+DROP TABLE IF EXISTS LOCATION;
+DROP TABLE IF EXISTS THEME;
+DROP TABLE IF EXISTS REGISTER;
+DROP TABLE IF EXISTS RATE;
 
 --table USER
-create table USER(
+CREATE TABLE USER(
     us_id NUMERIC(10) NOT NULL,
     us_password NUMERIC(30) NOT NULL,
     us_role VARCHAR(30) CHECK (us_role IN ('administrator', 'contributor', 'visitor')),
@@ -23,7 +23,7 @@ create table USER(
 
 --table EVENT
 
-create table EVENT(
+CREATE TABLE EVENT(
     ev_id NUMERIC(10) NOT NULL,
     ev_price NUMERIC(10,2), 
     ev_date_start DATE NOT NULL, 
@@ -40,7 +40,7 @@ create table EVENT(
     CONSTRAINT fk_event_th FOREIGN KEY (ev_th_id) REFERENCES THEME(th_id)
 ); 
 
-create table LOCATION(
+CREATE TABLE LOCATION(
     lo_id NUMERIC(10) NOT NULL,
     lo_name VARCHAR(30) NOT NULL, 
     lo_add VARCHAR(30) NOT NULL,
@@ -49,21 +49,21 @@ create table LOCATION(
     CONSTRAINT pk_location PRIMARY KEY lo_id,
 );
 
-create table THEME(
+CREATE TABLE THEME(
     th_id NUMERIC(10) NOT NULL,
     th_name VARCHAR(30) NOT NULL,
     CONSTRAINT pk_th PRIMARY KEY th_id
 );
 /* ajoute des theme avec des nom tous distinct, ex: 1 art et 2 art ne peut pas exsister*/
 
-create table REGISTER(
+CREATE TABLE REGISTER(
     re_registration_date DATE NOT NULL,
     re_us_id NUMERIC(10) NOT NULL,
     re_ev_id NUMERIC(10) NOT NULL,
     CONSTRAINT fk_re_us FOREIGN (re_us_id) KEY REFERENCES USER(us_id),
     CONSTRAINT fk_re_ev FOREIGN (re_ev_id) KEY REFERENCES EVENT(ev_id)
 );
-create table RATE(
+CREATE TABLE RATE(
     ra_date DATE NOT NULL,
     ra_rating NUMERIC(10) NOT NULL,
     ra_us_id NUMERIC(10) NOT NULL,

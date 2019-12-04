@@ -1,12 +1,15 @@
-
+/* BDD Ambre */
 USE e20160018322;
+/* BDD Alex */
+/* USE e20170006075; */
+
 /*test*/
-DROP table if exists REGISTER;
-DROP table if exists RATE;
-DROP table if exists USER;
-DROP table if exists EVENTS;
-DROP table if exists LOCATIONS;
-DROP table if exists THEME;
+DROP TABLE IF EXISTS Register;
+DROP TABLE IF EXISTS Rate;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS EVENTS;
+DROP TABLE IF EXISTS LOCATIONS;
+DROP TABLE IF EXISTS THEME;
 
 
 create table USER(
