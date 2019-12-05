@@ -7,10 +7,10 @@ USE e20160018322;
 DROP TABLE IF EXISTS Register;
 DROP TABLE IF EXISTS Rate;
 DROP TABLE IF EXISTS User;
-DROP TABLE IF EXISTS EVENTS;
-DROP TABLE IF EXISTS LOCATIONS;
-DROP TABLE IF EXISTS THEME;
-
+DROP TABLE IF EXISTS Events;
+DROP TABLE IF EXISTS Locations;
+DROP TABLE IF EXISTS Theme;
+DROP TABLE IF EXISTS Logerror;
 
 create table USER(
     us_id NUMERIC(10) NOT NULL,
@@ -26,8 +26,8 @@ create table LOCATIONS(
     lo_name VARCHAR(30) NOT NULL, 
     lo_address VARCHAR(100) NOT NULL,
     lo_city VARCHAR(30) NOT NULL,
-    lo_gps_lat DECIMAL(10,10) NOT NULL,
-    lo_gps_long DECIMAL(10,10) NOT NULL,
+    lo_gps_lat DECIMAL(65,10) NOT NULL,
+    lo_gps_long DECIMAL(65,10) NOT NULL,
     CONSTRAINT pk_location PRIMARY KEY (lo_id)
 );
 
@@ -39,17 +39,18 @@ create table THEME(
 
 create table EVENTS(
     ev_id NUMERIC(10) NOT NULL,
+    ev_lo_id NUMERIC(10) NOT NULL,
+    ev_th_id NUMERIC(10) NOT NULL,
+    ev_name VARCHAR(30),
     ev_price NUMERIC(10,2), 
     ev_date_start DATE NOT NULL, 
     ev_date_end DATE NOT NULL,
     ev_start_time TIME NOT NULL,
     ev_end_time TIME NOT NULL, 
-    ev_nb_people_min NUMERIC(30), 
-    ev_nb_people_max NUMERIC(30),
-    ev_descriptive VARCHAR(300),
+    ev_nb_people_min NUMERIC(30) DEFAULT NULL, 
+    ev_nb_people_max NUMERIC(30) DEFAULT NULL,
+    ev_descriptive TEXT,
     ev_average NUMERIC(10),
-    ev_lo_id NUMERIC(10) NOT NULL,
-    ev_th_id NUMERIC(10) NOT NULL,
     ev_picture VARCHAR(50),
     CONSTRAINT pk_event PRIMARY KEY (ev_id),
     CONSTRAINT fk_event_lo FOREIGN KEY (ev_lo_id) REFERENCES LOCATIONS(lo_id),
@@ -74,3 +75,10 @@ create table RATE(
     CONSTRAINT fk_ra_ev FOREIGN KEY(ra_ev_id) REFERENCES EVENTS(ev_id),
     CONSTRAINT pk_ra PRIMARY KEY (ra_us_id, ra_ev_id)
 );
+
+CREATE TABLE LOGERROR  (
+  log_id INT(11) AUTO_INCREMENT,
+  MESSAGE VARCHAR(255) DEFAULT NULL,
+  THETIME TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT PK_LOGERROR PRIMARY KEY (log_id)
+);	
