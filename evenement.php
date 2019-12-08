@@ -39,31 +39,35 @@
   </div>
 </nav>
 <!-- Fin du menu -->
-<!-- Script php -->
+<div class = 'bloc'>
+dfgsdg
 <?php 
-  $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
-  $event = $bdd->prepare("SELECT * FROM EVENTS ");
-  $event->execute();
+    $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+    $event = $bdd->prepare("SELECT * FROM EVENTS WHERE ev_id = ?");
+    $event->execute(array(1));
+    
+    while($resulat = $event->fetch()){
+        echo  "<h1>".$resulat['ev_name']."</h1>";
+        echo "<img src=".$resulat['ev_picture']." class='img-fluid' width = 790px>";
+        echo $resulat['ev_descriptive'];
+    }
+
+
+
 ?>
+</div>
 <!-- Début de la barre de recherche -->
-<div class="bloc" id="bloc-search-bar">
+<!-- <div class="bloc" id="bloc-search-bar">
   <div class="wrapper">
 
     <div class="search-bar-category">
       <select class="form-control search-slt">
-        <?php 
-        $theme = $bdd->prepare("SELECT * FROM THEME");
-        $theme->execute();
-        while($resulat = $theme->fetch()){
-          echo "<option>".$resulat['th_name']."</option>";
-        }
-        ?>
-        <!-- <option>(Sélectionne une catégorie)</option>
+        <option>(Sélectionne une catégorie)</option>
         <option>Spectacle</option>
         <option>Concert</option>
         <option>Exposition</option>
         <option>Festival</option>
-        <option>Evènement sportif</option> -->
+        <option>Evènement sportif</option>
       </select>
     </div>
 
@@ -77,43 +81,8 @@
 
   </div>
 
-</div>
+</div> -->
 <!-- Fin de la barre de recherche -->
-
-<!-- Début de la map -->
-<div class="bloc" id="bloc-map">
-  [Open map]
-  <div id="map"></div>
-    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.0.1/build/ol.js" type="text/javascript"></script>
-
-    <script>
-      var map = new ol.Map({
-        target: 'map',
-        layers: [new ol.layer.Tile({source: new ol.source.OSM()})],
-        view: new ol.View({center: ol.proj.fromLonLat([2.1833, 41.3833]), zoom: 6})
-      });
-    </script>
-</div>
-<!-- Fin de la map -->
-
-<!-- Début de la liste des événements -->
-<div class="bloc" id="bloc-list-events">
-  [Liste des événements]
-      <?php 
-          while($resulat = $event->fetch()){
-            echo '<div class="card bg-dark text-white">';
-            echo '<img class="card-img" src="'.$resulat['ev_picture'].'"width=563px height=270px alt="Card image">';
-            echo '<div class="card-img-overlay">';
-            echo '<h5 class="card-title">'.$resulat['ev_name'].'</h5>';
-            echo '<p class="card-text">'.$resulat['ev_date_start'].'</p>';
-            echo '</div>';
-            echo '</div>';
-            echo '<button type="button" class="btn btn-primary">Voir</button>';
-        }
-      ?>
-      
-</div>
-<!-- Fin de la liste des événements -->
 
 <!-- Début du footer -->
 <footer class="container-fluid text-center" id="footer">
