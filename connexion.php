@@ -122,7 +122,15 @@
 										</div>
 									</div>
 								</form>
-								<form id="register-form" action="https://phpoll.com/register/process" method="post" role="form" style="display: none;">
+								<?php 
+								try{
+									$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+								}catch(PDOException $e){
+									echo $e->getMessage();
+									die("Connexion impossible");
+								}
+								?>
+								<form id="register-form" action="register.php" method="post" role="form" style="display: none;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>

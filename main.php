@@ -58,12 +58,6 @@
           echo "<option>".$resulat['th_name']."</option>";
         }
         ?>
-        <!-- <option>(Sélectionne une catégorie)</option>
-        <option>Spectacle</option>
-        <option>Concert</option>
-        <option>Exposition</option>
-        <option>Festival</option>
-        <option>Evènement sportif</option> -->
       </select>
     </div>
 
@@ -74,10 +68,11 @@
     <div class="search-bar-submit">
       <input type="submit" value="Rechercher">
     </div>
-
   </div>
-
 </div>
+<?php 
+
+?>
 <!-- Fin de la barre de recherche -->
 
 <!-- Début de la map -->
@@ -100,17 +95,53 @@
 <div class="bloc" id="bloc-list-events">
   [Liste des événements]
       <?php 
-          while($resulat = $event->fetch()){
-            echo '<div class="card bg-dark text-white">';
-            echo '<img class="card-img" src="'.$resulat['ev_picture'].'"width=563px height=270px alt="Card image">';
-            echo '<div class="card-img-overlay">';
-            echo '<h5 class="card-title">'.$resulat['ev_name'].'</h5>';
-            echo '<p class="card-text">'.$resulat['ev_date_start'].'</p>';
-            echo '</div>';
-            echo '</div>';
-            echo '<button type="button" class="btn btn-primary">Voir</button>';
+        //   while($resulat = $event->fetch()){
+        //     echo '<div class="card bg-dark text-white">';
+        //     echo '<img class="card-img" src="'.$resulat['ev_picture'].'"width=563px height=270px alt="Card image">';
+        //     echo '<div class="card-img-overlay">';
+        //     echo '<h5 class="card-title">'.$resulat['ev_name'].'</h5>';
+        //     echo '<p class="card-text">'.$resulat['ev_date_start'].'</p>';
+        //     echo '</div>';
+        //     echo '</div>';
+        //     echo '<button type="button" class="btn btn-primary">Voir</button>';
+        // }
+        echo '<table >';
+        while($resulat = $event->fetch()){
+          echo '<table>';
+          echo '<tr>';
+          echo '<th rospan = "2"> <img class="card-img" src="'.$resulat['ev_picture'].'" width=563px height=270px alt="Card image"></th>';
+          echo '<td >'.$resulat['ev_name'].'</td>';
+          echo '</tr> <tr>';
+          echo '<td >'.$resulat['ev_date_start'].'</td>';
+          echo '</tr> <tr>';
+          echo '<td >'.$resulat['ev_price'].'</td>';
+          echo '</tr> <tr>';
+          echo '<td> <button type="button" class="btn btn-primary">Voir</button> </td> ';
+          echo '</tr>';
+          echo '</thead>';
+          echo '</table>';
         }
+        echo '</table>';
       ?>
+      <table>
+   <tr>
+       <th>Titre du film</th>
+       <td>Massacre à la tronçonneuse</td>
+       <td>Les bisounours font du ski</td>
+       <td>Lucky Luke, seul contre tous</td>
+   </tr>
+   <tr>
+       <th>Pour enfants ?</th>
+       <td>Non, trop violent</td>
+       <td>Oui, adapté</td>
+       <td rowspan="2">Pour toute la famille !</td>
+   </tr>
+   <tr>
+       <th>Pour adolescents ?</th>
+       <td>Oui</td>
+       <td>Pas assez violent...</td>
+   </tr>
+</table>
       
 </div>
 <!-- Fin de la liste des événements -->
