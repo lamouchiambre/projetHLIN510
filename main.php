@@ -47,7 +47,9 @@
   $event = $bdd->prepare("SELECT ev_id, ev_th_id, ev_name, ev_price, DAY(ev_date_start) as jour, MONTH(ev_date_start) as mois, YEAR(ev_date_start) annee, ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJour FROM EVENTS ");
   $event->execute();
 ?>
+<!-- Fin script -->
 <!-- Début de la barre de recherche -->
+<form  method = "get" action = "">
 <div class="bloc" id="bloc-search-bar">
   <div class="wrapper">
 
@@ -57,7 +59,7 @@
         $theme = $bdd->prepare("SELECT * FROM THEME");
         $theme->execute();
         while($resulat = $theme->fetch()){
-          echo "<option>".$resulat['th_name']."</option>";
+          echo "<option value='".$resulat['th_id']."'>".$resulat['th_name']."</option>";
         }
         ?>
       </select>
@@ -72,8 +74,9 @@
     </div>
   </div>
 </div>
+</form>
 <?php 
-
+  
 ?>
 <!-- Fin de la barre de recherche -->
 
@@ -97,39 +100,23 @@
 <div class="bloc" id="bloc-list-events">
   [Liste des événements]
       <?php 
-        //   while($resulat = $event->fetch()){
-        //     echo '<div class="card bg-dark text-white">';
-        //     echo '<img class="card-img" src="'.$resulat['ev_picture'].'"width=563px height=270px alt="Card image">';
-        //     echo '<div class="card-img-overlay">';
-        //     echo '<h5 class="card-title">'.$resulat['ev_name'].'</h5>';
-        //     echo '<p class="card-text">'.$resulat['ev_date_start'].'</p>';
-        //     echo '</div>';
-        //     echo '</div>';
-        //     echo '<button type="button" class="btn btn-primary">Voir</button>';
-        // }
         echo '<table >';
         while($resulat = $event->fetch()){
-          //echo '<table>';
           echo '<tr>';
           echo '<th> <img align="middle" src="'.$resulat['ev_picture'].'" width=100px height=100px></th>';
           echo '<td >'.$resulat['ev_name'].'</td>';
-          //echo '</tr> <tr>';
           echo '<td > '.$jour[$resulat['numJour']].' '.$resulat['jour'].' '.$mois[$resulat['mois'] - 1].' '.$resulat['annee'].' </td>';
-          //echo '</tr> <tr>';
+
           if ($resulat['ev_price'] == NULL) {
             echo '<td > GRATUIT </td>';
           }else {
             echo '<td > '.$resulat['ev_price'].'€ </td>';
           }
-          //echo '<td >'.$resulat['ev_price'].'</td>';
-          //echo '</tr> <tr>';
-          //echo '<td> <button type="button" class="btn btn-primary name="'.$resulat['ev_id'].'">Voir</button> </td> ';
           echo "<td>  <form action='evenement.php' method='get'>
-            <input type='hidden' name='id' value=". $resulat['ev_id']. ">
+            <input type='hidden' name='id' value=".$resulat['ev_id']. ">
             <input type='submit' class='btn btn-primary' name='voir' value='". $resulat['ev_id']. "'> </td>";
           echo '</tr>';
           echo '</thead>';
-          //echo '</table>';
         }
         echo '</table>';
       ?>      
