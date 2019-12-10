@@ -41,8 +41,10 @@
 <!-- Fin du menu -->
 <!-- Script php -->
 <?php 
+  $mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+  $jour = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
   $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
-  $event = $bdd->prepare("SELECT * FROM EVENTS ");
+  $event = $bdd->prepare("SELECT ev_id, ev_th_id, ev_name, ev_price, DAY(ev_date_start) as jour, MONTH(ev_date_start) as mois, YEAR(ev_date_start) annee, ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJour FROM EVENTS ");
   $event->execute();
 ?>
 <!-- Début de la barre de recherche -->
@@ -107,42 +109,30 @@
         // }
         echo '<table >';
         while($resulat = $event->fetch()){
-          echo '<table>';
+          //echo '<table>';
           echo '<tr>';
-          echo '<th rospan = "2"> <img class="card-img" src="'.$resulat['ev_picture'].'" width=563px height=270px alt="Card image"></th>';
+          echo '<th> <img align="middle" src="'.$resulat['ev_picture'].'" width=100px height=100px></th>';
           echo '<td >'.$resulat['ev_name'].'</td>';
-          echo '</tr> <tr>';
-          echo '<td >'.$resulat['ev_date_start'].'</td>';
-          echo '</tr> <tr>';
-          echo '<td >'.$resulat['ev_price'].'</td>';
-          echo '</tr> <tr>';
-          echo '<td> <button type="button" class="btn btn-primary">Voir</button> </td> ';
+          //echo '</tr> <tr>';
+          echo '<td > '.$jour[$resulat['numJour']].' '.$resulat['jour'].' '.$mois[$resulat['mois'] - 1].' '.$resulat['annee'].' </td>';
+          //echo '</tr> <tr>';
+          if ($resulat['ev_price'] == NULL) {
+            echo '<td > GRATUIT </td>';
+          }else {
+            echo '<td > '.$resulat['ev_price'].'€ </td>';
+          }
+          //echo '<td >'.$resulat['ev_price'].'</td>';
+          //echo '</tr> <tr>';
+          //echo '<td> <button type="button" class="btn btn-primary name="'.$resulat['ev_id'].'">Voir</button> </td> ';
+          echo "<td>  <form action='evenement.php' method='get'>
+            <input type='hidden' name='id' value=". $resulat['ev_id']. ">
+            <input type='submit' class='btn btn-primary' name='voir' value='". $resulat['ev_id']. "'> </td>";
           echo '</tr>';
           echo '</thead>';
-          echo '</table>';
+          //echo '</table>';
         }
         echo '</table>';
-      ?>
-      <table>
-   <tr>
-       <th>Titre du film</th>
-       <td>Massacre à la tronçonneuse</td>
-       <td>Les bisounours font du ski</td>
-       <td>Lucky Luke, seul contre tous</td>
-   </tr>
-   <tr>
-       <th>Pour enfants ?</th>
-       <td>Non, trop violent</td>
-       <td>Oui, adapté</td>
-       <td rowspan="2">Pour toute la famille !</td>
-   </tr>
-   <tr>
-       <th>Pour adolescents ?</th>
-       <td>Oui</td>
-       <td>Pas assez violent...</td>
-   </tr>
-</table>
-      
+      ?>      
 </div>
 <!-- Fin de la liste des événements -->
 

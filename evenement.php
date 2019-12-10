@@ -28,7 +28,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Acceuil</a></li>
+        <li class="active"><a href="main.php">Acceuil</a></li>
         <li><a href="#">A propos</a></li>
         <li><a href="#">Nous contacter</a></li>
       </ul>
@@ -40,11 +40,15 @@
 </nav>
 <!-- Fin du menu -->
 <div class = 'bloc'>
-dfgsdg
 <?php 
+if($_GET['voir']){
+  $name = $_GET['voir'];
+  //echo $name;
+}
     $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
     $event = $bdd->prepare("SELECT * FROM EVENTS WHERE ev_id = ?");
-    $event->execute(array(1));
+    $event->execute(array($name));
+    
     
     while($resulat = $event->fetch()){
         echo  "<h1>".$resulat['ev_name']."</h1>";
