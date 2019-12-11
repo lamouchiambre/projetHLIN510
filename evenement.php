@@ -60,33 +60,6 @@ if($_GET['voir']){
 
 ?>
 </div>
-<!-- Début de la barre de recherche -->
-<!-- <div class="bloc" id="bloc-search-bar">
-  <div class="wrapper">
-
-    <div class="search-bar-category">
-      <select class="form-control search-slt">
-        <option>(Sélectionne une catégorie)</option>
-        <option>Spectacle</option>
-        <option>Concert</option>
-        <option>Exposition</option>
-        <option>Festival</option>
-        <option>Evènement sportif</option>
-      </select>
-    </div>
-
-    <div class="search-bar-date">
-      <input class="form-control" type="date">
-    </div>
-
-    <div class="search-bar-submit">
-      <input type="submit" value="Rechercher">
-    </div>
-
-  </div>
-
-</div> -->
-<!-- Fin de la barre de recherche -->
 
 <!-- Début du footer -->
 <footer class="container-fluid text-center" id="footer">
