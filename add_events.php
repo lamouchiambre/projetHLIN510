@@ -44,7 +44,7 @@
 <!-- Fin du menu -->
 <div class = 'bloc'>
 <h1> Creer un evenement </h1>
-<form action="" method="get"> 
+<form action="" method="post" enctype="multipart/form-data"> 
     <div class="form-groupe">
         <label for="nom">Le nom </label>
         <input type="text" id="nom" name="nom">
@@ -112,31 +112,43 @@
     } catch(Exception $e){
         die("Impossible de se connectée".$e->getMessage());
     }
-    if (!empty($_GET)){
+    if (!empty($_POST)){
         try{
+            $name = $_FILES['img']['name'];
+            if(!empty($name)){
+              echo $name;
+              //echo $_POST['img'];
+              $data = file_get_contents($_FILES['img']['tmp_name']);
+              $target = "img/events/".basename($name);
+              if (move_uploaded_file($_FILES['img']['tmp_name'], $target)){
+                echo "true";
+              }
+            }
+            
             $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
             $bdd->beginTransaction();
             $p = $bdd->prepare("INSERT INTO `events` (`ev_id`, `ev_lo_id`, `ev_th_id`, `ev_name`, `ev_price`, `ev_date_start`, `ev_date_end`, `ev_start_time`, `ev_end_time`, `ev_nb_people_min`, `ev_nb_people_max`, `ev_descriptive`, `ev_average`, `ev_picture`) VALUES (NULL, :theme, :lieu, :nom, :prix, :date_deb, :date_fin, :heur_deb, :heur_fin, NULL, NULL,:descr,NULL, :img)");
-            $p->bindParam(':theme', $_GET['theme']);
-            $p->bindParam(':lieu', $_GET['lieu']);
-            $p->bindParam(':nom', $_GET['nom']);
-            $p->bindParam(':prix', $_GET['prix']);
-            $p->bindParam(':date_deb', $_GET['date_deb']);
-            $p->bindParam(':date_fin', $_GET['date_fin']);
-            $p->bindParam(':heur_deb', $_GET['heure_deb']);
-            $p->bindParam(':heur_fin', $_GET['heure_fin']);
-            $p->bindParam(':descr', $_GET['description']);
-            $image;
+            $p->bindParam(':theme', $_POST['theme']);
+            $p->bindParam(':lieu', $_POST['lieu']);
+            $p->bindParam(':nom', $_POST['nom']);
+            $p->bindParam(':prix', $_POST['prix']);
+            $p->bindParam(':date_deb', $_POST['date_deb']);
+            $p->bindParam(':date_fin', $_POST['date_fin']);
+            $p->bindParam(':heur_deb', $_POST['heure_deb']);
+            $p->bindParam(':heur_fin', $_POST['heure_fin']);
+            $p->bindParam(':descr', $_POST['description']);
+            //$image;
             $p->bindParam(':img',$image);
-            if (empty($_GET['img'])) {
-                $image = "img/default.jpg";
-                $dossier = 'img/';
+            if (empty($name)) {
+                $image = "img/events/default.jpg";
+                echo "non";
             }else{
-                $image = "img/".$_GET['img'];
+                $image = "img/events/".$name;
+                echo "oui";
             }
             $p->execute();
             $bdd->commit();
-            echo gettype($_GET['img']);
+    
         } catch(Exception $e){
             $bdd->rollBack();
             echo "impossible ajouter".$e->getMessage();    
