@@ -75,7 +75,17 @@
     <div class="search-bar-date">
       <input class="form-control" type="date">
     </div>
-
+    <div class= "search-bar-category"> 
+      <select class="form-control search-slt">
+          <?php 
+            $lieu = $bdd->prepare("SELECT * FROM locations");
+            $lieu->execute();
+            while($resulat = $lieu->fetch()){
+              echo "<option value='".$resulat['lo_id']."'>".$resulat['lo_name']."</option>";
+            }
+          ?>
+        </select>
+    </div>
     <div class="search-bar-submit">
       <input type="submit" value="Rechercher">
     </div>
@@ -99,8 +109,17 @@
         }).addTo(mymap);
 
         var marker = L.marker([43.6, 3.8833]).addTo(mymap);
-      }  
+        L.marker([43.6, 3.7833]).addTo(mymap);
+        <?php 
+        $lieu = $bdd->prepare("SELECT * FROM locations");
+        $lieu->execute();
+        while($r = $lieu->fetch()){
+          echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap);";
+        }
+      ?>
+      }
     </script>
+
 </div>
 <!-- Fin de la map -->
 
@@ -130,7 +149,9 @@
       ?>      
 </div>
 <!-- Fin de la liste des événements -->
+<script> 
 
+</script>
 <!-- Début du footer -->
 <footer class="container-fluid text-center" id="footer">
   <p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>

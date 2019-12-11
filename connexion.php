@@ -1,3 +1,5 @@
+<php? session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,7 +96,7 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="login-form" action="https://phpoll.com/login/process" method="post" role="form" style="display: block;">
+								<form id="login-form" action="" method="post" role="form" style="display: block;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -129,7 +131,18 @@
 									echo $e->getMessage();
 									die("Connexion impossible");
 								}
+									if (!empty($_POST['Log In'])) {
+										$user = $_POST['username'];
+										$mdp = $_POST['password'];
+										$connexion = $bdd->prepare("SELECT * FROM USER WHERE us_mail = :user AND us_passworld = :mdp");
+										$connexion->bindParam(':user',$user);
+										$connexion->bindParam(':mdp', $mdp);
+										$connexion->excute();
+										echo "connecter";
+									}
+
 								?>
+
 								<form id="register-form" action="register.php" method="post" role="form" style="display: none;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
