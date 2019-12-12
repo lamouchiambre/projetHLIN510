@@ -50,24 +50,24 @@
 <?php 
   $mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   $jour = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
-  $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+  $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
   $event = $bdd->prepare("SELECT ev_id, ev_th_id, ev_name, ev_price, DAY(ev_date_start) as jour, MONTH(ev_date_start) as mois, YEAR(ev_date_start) annee, ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJour FROM EVENTS ");
   $event->execute();
 ?>
 <!-- Fin script -->
 <!-- Début de la barre de recherche -->
-<form  method = "get" action = "">
+<form  method = "post" action = "">
 <div class="bloc" id="bloc-search-bar">
   <div class="wrapper">
 
     <div class="search-bar-category">
       <select class="form-control search-slt">
         <?php 
-        $theme = $bdd->prepare("SELECT * FROM THEME");
-        $theme->execute();
-        while($resulat = $theme->fetch()){
-          echo "<option value='".$resulat['th_id']."'>".$resulat['th_name']."</option>";
-        }
+          $theme = $bdd->prepare("SELECT * FROM THEME");
+          $theme->execute();
+          while($resulat = $theme->fetch()){
+            echo "<option value='".$resulat['th_id']."'>".$resulat['th_name']."</option>";
+          }
         ?>
       </select>
     </div>
@@ -75,7 +75,7 @@
     <div class="search-bar-date">
       <input class="form-control" type="date">
     </div>
-    <div class= "search-bar-category"> 
+    <div class= "search-bar-locations"> 
       <select class="form-control search-slt">
           <?php 
             $lieu = $bdd->prepare("SELECT * FROM locations");
@@ -108,13 +108,16 @@
           attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(mymap);
 
-        var marker = L.marker([43.6, 3.8833]).addTo(mymap);
-        L.marker([43.6, 3.7833]).addTo(mymap);
+        // var marker = L.marker([43.6, 3.8833]).addTo(mymap);
+        // marker.bindPopup("<b>text du haut</b><br>text du bas").openPopup();
+
         <?php 
         $lieu = $bdd->prepare("SELECT * FROM locations");
         $lieu->execute();
         while($r = $lieu->fetch()){
-          echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap);";
+          echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
+          bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."');";
+          
         }
       ?>
       }
