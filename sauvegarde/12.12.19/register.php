@@ -1,0 +1,1 @@
+bonjour je suis <?php echo $_POST['username']; ?> mon mdp est <?php echo $_POST['password']; ?> et mon email est <?php echo $_POST['email']; ?> 
