@@ -74,7 +74,7 @@ footer {
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(2, 2fr);
+  grid-template-columns: repeat(3, 2fr);
   grid-gap: 10px;
 }
 .search-bar-category {
@@ -82,6 +82,9 @@ footer {
 }
 .search-bar-date { 
 	grid-row: 1;
+}
+.search-bar-locations {
+  grid-row: 1;
 }
 .search-bar-submit {
 	grid-row: 1;

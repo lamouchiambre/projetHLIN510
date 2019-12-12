@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Site événementiel d'Alexambre</title>
+  <title>Site événementiel d'Alex et Ambre</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -61,7 +61,8 @@
   <div class="wrapper">
 
     <div class="search-bar-category">
-      <select class="form-control search-slt">
+      <select class="form-control search-slt" name="theme">
+        <option value="0">Tous Thèmes</option>";
         <?php 
           $theme = $bdd->prepare("SELECT * FROM THEME");
           $theme->execute();
@@ -77,14 +78,15 @@
     </div>
     <div class= "search-bar-locations"> 
       <select class="form-control search-slt">
-          <?php 
-            $lieu = $bdd->prepare("SELECT * FROM locations");
-            $lieu->execute();
-            while($resulat = $lieu->fetch()){
-              echo "<option value='".$resulat['lo_id']."'>".$resulat['lo_name']."</option>";
-            }
-          ?>
-        </select>
+        <option value="0">Toutes Localisations</option>";
+        <?php 
+          $lieu = $bdd->prepare("SELECT * FROM locations");
+          $lieu->execute();
+          while($resulat = $lieu->fetch()){
+            echo "<option value='".$resulat['lo_id']."'>".$resulat['lo_name']."</option>";
+          }
+        ?>
+      </select>
     </div>
     <div class="search-bar-submit">
       <input type="submit" value="Rechercher">
@@ -92,69 +94,92 @@
   </div>
 </div>
 </form>
-<?php 
-  
-?>
 <!-- Fin de la barre de recherche -->
 
 <!-- Début de la map -->
 <div class="bloc" id="bloc-map">
   <div id="mapid"></div>
-    <script>
-      window.onload = function() {
-        var mymap = L.map('mapid').setView([43.6, 3.8833], 13);
+  <script>
+    window.onload = function() {
+      var mymap = L.map('mapid').setView([43.6, 3.8833], 13);
 
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(mymap);
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(mymap);
 
-        // var marker = L.marker([43.6, 3.8833]).addTo(mymap);
-        // marker.bindPopup("<b>text du haut</b><br>text du bas").openPopup();
+      // var marker = L.marker([43.6, 3.8833]).addTo(mymap);
+      // marker.bindPopup("<b>text du haut</b><br>text du bas").openPopup();
 
-        <?php 
-        $lieu = $bdd->prepare("SELECT * FROM locations");
-        $lieu->execute();
-        while($r = $lieu->fetch()){
-          echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
-          bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."');";
-          
+      <?php 
+			// 					try{
+			// 						$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+			// 					}catch(PDOException $e){
+			// 						echo $e->getMessage();
+			// 						die("Connexion impossible");
+			// 					}
+			// 						if (!empty($_POST['Log In'])) {
+			// 							$user = $_POST['username'];
+			// 							$mdp = $_POST['password'];
+			// 							$connexion = $bdd->prepare("SELECT * FROM USER WHERE us_mail = :user AND us_passworld = :mdp");
+			// 							$connexion->bindParam(':user',$user);
+			// 							$connexion->bindParam(':mdp', $mdp);
+			// 							$connexion->excute();
+			// 							echo "connecter";
+			// 						}
+			?>
+
+      <?php 
+        if (isset($_POST['Rechercher'])) {
+          $th_id = $_POST['theme'];
+          if ($th_id != 0) { // Thème renseigné
+            $lieu = $bdd->prepare("SELECT * FROM locations WHERE th_id = :theme_id");
+            $lieu->bindParam(':th_id', $th_id);
+            $lieu->execute();
+            while ($r = $lieu->fetch()){
+              echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
+                bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."');";
+            } 
+          }
+        } else {        
+          $lieu = $bdd->prepare("SELECT * FROM locations");
+          $lieu->execute();
+          while ($r = $lieu->fetch()){
+            echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
+              bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."');";
+          }
         }
       ?>
-      }
-    </script>
+    }
+  </script>
 
 </div>
 <!-- Fin de la map -->
 
 <!-- Début de la liste des événements -->
 <div class="bloc" id="bloc-list-events">
-  [Liste des événements]
-      <?php 
-        echo '<table >';
-        while($resulat = $event->fetch()){
-          echo '<tr>';
-          echo '<th> <img align="middle" src="'.$resulat['ev_picture'].'" width=100px height=100px></th>';
-          echo '<td >'.$resulat['ev_name'].'</td>';
-          echo '<td > '.$jour[$resulat['numJour']].' '.$resulat['jour'].' '.$mois[$resulat['mois'] - 1].' '.$resulat['annee'].' </td>';
+  <?php 
+    echo '<table>';
+    while($resulat = $event->fetch()) {
+      echo '<tr>';
+      echo '<th> <img align="middle" src="'.$resulat['ev_picture'].'" width=100px height=100px></th>';
+      echo '<td>'.$resulat['ev_name'].'</td>';
+      echo '<td> '.$jour[$resulat['numJour']].' '.$resulat['jour'].' '.$mois[$resulat['mois'] - 1].' '.$resulat['annee'].' </td>';
 
-          if ($resulat['ev_price'] == NULL) {
-            echo '<td > GRATUIT </td>';
-          }else {
-            echo '<td > '.$resulat['ev_price'].'€ </td>';
-          }
-          echo "<td>  <form action='evenement.php' method='get'>
-            <input type='hidden' name='id' value=".$resulat['ev_id']. ">
-            <input type='submit' class='btn btn-primary' name='voir' value='". $resulat['ev_id']. "'> </td>";
-          echo '</tr>';
-          echo '</thead>';
-        }
-        echo '</table>';
-      ?>      
+      if ($resulat['ev_price'] == NULL) {
+        echo '<td > GRATUIT </td>';
+      } else {
+        echo '<td > '.$resulat['ev_price'].'€ </td>';
+      }
+      echo "<td>  <form action='evenement.php' method='get'>
+        <input type='hidden' name='id' value=".$resulat['ev_id']. ">
+        <input type='submit' class='btn btn-primary' name='voir' value='". $resulat['ev_id']. "'> </td>";
+      echo '</tr>';
+      echo '</thead>';
+    }
+    echo '</table>';
+  ?>      
 </div>
 <!-- Fin de la liste des événements -->
-<script> 
-
-</script>
 <!-- Début du footer -->
 <footer class="container-fluid text-center" id="footer">
   <p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
