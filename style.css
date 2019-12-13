@@ -33,7 +33,7 @@ ul.nav a:hover {
 	width: 60%;
 }
 .bloc {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.70);
   color: rgb(255, 255, 255);
   text-align: center;
 	width: 800px;
@@ -48,7 +48,7 @@ ul.nav a:hover {
   align-items: center;
 }
 footer {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.70);
   padding: 25px;
   color: white;
     display : table-row;
@@ -104,3 +104,14 @@ input {
 #mapid { 
   height: 480px; 
 }
+th {
+  text-align: center;
+}
+td {
+  padding: 5px;
+  margin: 5px;
+}
+/*table {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}*/

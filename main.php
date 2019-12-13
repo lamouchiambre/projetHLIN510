@@ -51,7 +51,12 @@
   $mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   $jour = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
   $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-  $req = "SELECT ev_id, ev_lo_id, ev_th_id, ev_name, ev_price, DAY(ev_date_start) as jour, MONTH(ev_date_start) as mois, YEAR(ev_date_start) annee, ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJour FROM EVENTS";
+  $req = "SELECT ev_id, ev_lo_id, ev_th_id, ev_name, ev_price, 
+    DAY(ev_date_start) as jour_debut, MONTH(ev_date_start) as mois_debut, YEAR(ev_date_start) annee_debut, 
+    DAY(ev_date_end) as jour_fin, MONTH(ev_date_end) as mois_fin, YEAR(ev_date_end) annee_fin, 
+    ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJourDebut, 
+    DATE_FORMAT(ev_date_end, '%w' ) as numJourFin 
+    FROM EVENTS";
 
   // if ($_POST['theme'] != 0) {
   //   $id = $_POST['theme'];
@@ -114,11 +119,11 @@
 <!-- Fin de la barre de recherche -->
 
 <?php
-  // redéfinition de la liste des événements selon ce qu'on a recherché
+  // Redéfinition de la liste des événements selon ce qu'on a recherché
   if (isset($_POST['Rechercher'])) {
     $th_id = $_POST['theme'];
     $lo_id = $_POST['localisation'];
-    // $date = $_POST['date']; 
+    $date = $_POST['date']; 
 
     // Modification de la requête
     if ($th_id != 0 or $lo_id != 0) {
@@ -132,6 +137,12 @@
     } 
     if ($lo_id != 0) {
       $req = $req."ev_lo_id = :lo_id";
+    }
+    if (($th_id != 0 or $lo_id != 0) and $date) {
+    	$req = $req." AND ";
+    }
+    if ($date) {
+    	$req = $req.":date BETWEEN ev_date_start AND ev_date_end";
     }
 
     $event = $bdd->prepare($req);
@@ -192,27 +203,18 @@
 <!-- Début de la liste des événements -->
 <div class="bloc" id="bloc-list-events">
   <?php 
-
-    // if (isset($_POST['Rechercher'])) {
-    //   $th_id = $_POST['theme'];
-    //   echo $th_id;
-    //   if ($th_id != 0) { // Thème renseigné
-    //     $list_event = $bdd->prepare("SELECT * FROM THEME WHERE th_id = :th_id");
-    //     $list_event->bindParam(':th_id', $th_id);
-    //     $list_event->execute();
-    //   }
-    // }
-
     echo '<table>';
+    echo '<tr> <th>Affiche</th> <td>ev_th_id</td> <td>ev_lo_id</td> <td>Titre</td> <td>Début</td> <td>Fin</td> <td>Prix</td> </tr>';
     while($resulat = $event->fetch()) {
       echo '<tr>';
       echo '<th> <img align="middle" src="'.$resulat['ev_picture'].'" width=200px height=100px></th>';
-      echo '<td>ev_th_id='.$resulat['ev_th_id'].'</td>';
-      echo '<td>ev_lo_id='.$resulat['ev_lo_id'].'</td>';
+      echo '<td>'.$resulat['ev_th_id'].'</td>';
+      echo '<td>'.$resulat['ev_lo_id'].'</td>';
       echo '<td>'.$resulat['ev_name'].'</td>';
-      echo '<td>'.$jour[$resulat['numJour']].' '.$resulat['jour'].' '.$mois[$resulat['mois'] - 1].' '.$resulat['annee'].' </td>';
+      echo '<td>'.$jour[$resulat['numJourDebut']].' '.$resulat['jour_debut'].' '.$mois[$resulat['mois_debut'] - 1].' '.$resulat['annee_debut'].' </td>';
+      echo '<td>'.$jour[$resulat['numJourFin']].' '.$resulat['jour_fin'].' '.$mois[$resulat['mois_fin'] - 1].' '.$resulat['annee_fin'].' </td>';
 
-      if ($resulat['ev_price'] == NULL) {
+      if ($resulat['ev_price'] == 0) {
         echo '<td > GRATUIT </td>';
       } else {
         echo '<td > '.$resulat['ev_price'].'€ </td>';
@@ -227,6 +229,7 @@
   ?>      
 </div>
 <!-- Fin de la liste des événements -->
+<br>
 <!-- Début du footer -->
 <footer class="container-fluid text-center" id="footer">
   <p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
