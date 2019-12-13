@@ -50,8 +50,11 @@
 <?php 
   $mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   $jour = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
-  $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+  // $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+  $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
   $req = "SELECT ev_id, ev_lo_id, ev_th_id, ev_name, ev_price, 
+    DATE_FORMAT(ev_date_start, '%Y-%m-%d') AS date_debut, 
+    DATE_FORMAT(ev_date_end, '%Y-%m-%d') AS date_fin, 
     DAY(ev_date_start) as jour_debut, MONTH(ev_date_start) as mois_debut, YEAR(ev_date_start) annee_debut, 
     DAY(ev_date_end) as jour_fin, MONTH(ev_date_end) as mois_fin, YEAR(ev_date_end) annee_fin, 
     ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJourDebut, 
@@ -88,8 +91,8 @@
         <?php 
           $theme = $bdd->prepare("SELECT * FROM THEME");
           $theme->execute();
-          while($resulat = $theme->fetch()){
-            echo "<option value='".$resulat['th_id']."'>".$resulat['th_name']."</option>";
+          while($res = $theme->fetch()){
+            echo "<option value='".$res['th_id']."'>".$res['th_name']."</option>";
           }
         ?>
       </select>
@@ -104,8 +107,8 @@
         <?php 
           $lieu = $bdd->prepare("SELECT * FROM locations");
           $lieu->execute();
-          while($resulat = $lieu->fetch()){
-            echo "<option value='".$resulat['lo_id']."'>".$resulat['lo_name']."</option>";
+          while($res = $lieu->fetch()){
+            echo "<option value='".$res['lo_id']."'>".$res['lo_name']."</option>";
           }
         ?>
       </select>
@@ -142,7 +145,10 @@
     	$req = $req." AND ";
     }
     if ($date) {
-    	$req = $req.":date BETWEEN ev_date_start AND ev_date_end";
+      echo $date;
+      // $req = $req.":date >= ev_date_start AND :date <= ev_date_end";
+      $req = $req.":date BETWEEN ev_date_start AND ev_date_end";
+      // $req = $req.":date == ev_date_start OR :date2 == ev_date_end";
     }
 
     $event = $bdd->prepare($req);
@@ -153,6 +159,9 @@
     }
     if ($lo_id != 0) {
       $event->bindParam(':lo_id', $lo_id);
+    }
+    if ($date) {
+      $event->bindParam(':date', $date);
     }
 
     $event->execute();
@@ -205,23 +214,23 @@
   <?php 
     echo '<table>';
     echo '<tr> <th>Affiche</th> <td>ev_th_id</td> <td>ev_lo_id</td> <td>Titre</td> <td>Début</td> <td>Fin</td> <td>Prix</td> </tr>';
-    while($resulat = $event->fetch()) {
+    while($res = $event->fetch()) {
       echo '<tr>';
-      echo '<th> <img align="middle" src="'.$resulat['ev_picture'].'" width=200px height=100px></th>';
-      echo '<td>'.$resulat['ev_th_id'].'</td>';
-      echo '<td>'.$resulat['ev_lo_id'].'</td>';
-      echo '<td>'.$resulat['ev_name'].'</td>';
-      echo '<td>'.$jour[$resulat['numJourDebut']].' '.$resulat['jour_debut'].' '.$mois[$resulat['mois_debut'] - 1].' '.$resulat['annee_debut'].' </td>';
-      echo '<td>'.$jour[$resulat['numJourFin']].' '.$resulat['jour_fin'].' '.$mois[$resulat['mois_fin'] - 1].' '.$resulat['annee_fin'].' </td>';
+      echo '<th> <img align="middle" src="'.$res['ev_picture'].'" width=200px height=100px></th>';
+      echo '<td>'.$res['ev_th_id'].'</td>';
+      echo '<td>'.$res['ev_lo_id'].'</td>';
+      echo '<td>'.$res['ev_name'].'</td>';
+      echo '<td>'.$res['date_debut']."<br>".$jour[$res['numJourDebut']].' '.$res['jour_debut'].' '.$mois[$res['mois_debut'] - 1].' '.$res['annee_debut'].' </td>';
+      echo '<td>'.$res['date_fin']."<br>".$jour[$res['numJourFin']].' '.$res['jour_fin'].' '.$mois[$res['mois_fin'] - 1].' '.$res['annee_fin'].' </td>';
 
-      if ($resulat['ev_price'] == 0) {
+      if ($res['ev_price'] == 0) {
         echo '<td > GRATUIT </td>';
       } else {
-        echo '<td > '.$resulat['ev_price'].'€ </td>';
+        echo '<td > '.$res['ev_price'].'€ </td>';
       }
       echo "<td>  <form action='evenement.php' method='get'>
-        <input type='hidden' name='id' value=".$resulat['ev_id']. ">
-        <input type='submit' class='btn btn-primary' name='voir' value='". $resulat['ev_id']. "'> </td>";
+        <input type='hidden' name='id' value=".$res['ev_id']. ">
+        <input type='submit' class='btn btn-primary' name='voir' value='". $res['ev_id']. "'> </td>";
       echo '</tr>';
       echo '</thead>';
     }
