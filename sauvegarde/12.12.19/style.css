@@ -1,0 +1,102 @@
+html, body {
+  height: 100%;
+  margin: 0; padding: 0;
+}
+body { 
+  background: url(img/crowd.jpg) no-repeat center fixed; 
+  -webkit-background-size: cover; 
+  background-size: cover;
+  display : table;
+  width: 100%;
+
+  /* background: #ffd89b;
+  background: -webkit-linear-gradient(to right, #ffd89b, #19547b);
+  background: linear-gradient(to right, #ffd89b, #19547b); */
+}
+.navbar {
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 1); 
+}
+.nav {
+  background-color: rgba(150, 0, 75, 0.5);  
+}
+.nav a {
+  color: red;
+}
+ul.nav a:hover {
+  /* background-color: rgba(150, 0, 75, 1);   */
+  background-color: DimGrey !important;  
+  /* color: Plum !important; */
+  color: Gold !important;
+}
+.logo {
+	width: 60%;
+}
+.bloc {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgb(255, 255, 255);
+  text-align: center;
+	width: 800px;
+  margin: 0 auto;
+  border-radius: 5px;
+	margin-top: 5px;
+	padding: 5px;
+}
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+footer {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 25px;
+  color: rgb(255, 255, 255);
+    display : table-row;
+    height: 1px;
+}
+input {
+  color: rgb(0, 0, 0);
+}
+@import "compass/css3";
+
+.flex-container {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  -webkit-flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 2fr);
+  grid-gap: 10px;
+}
+.search-bar-category {
+  grid-row: 1;
+}
+.search-bar-date { 
+	grid-row: 1;
+}
+.search-bar-submit {
+	grid-row: 1;
+	color: black;
+	margin: 5px;
+}
+
+#map {
+	width: 100%;
+	height: 400px;
+	margin: 0;
+	border-radius: 5px;
+}
+#mapid { 
+  height: 480px; 
+}

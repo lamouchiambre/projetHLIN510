@@ -54,6 +54,9 @@ footer {
     display : table-row;
     height: 1px;
 }
+input {
+  color: rgba(0, 0, 0, 1);
+}
 
 @import "compass/css3";
 
