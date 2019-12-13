@@ -51,7 +51,7 @@
   $mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   $jour = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
   $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-  $req = "SELECT ev_id, ev_th_id, ev_name, ev_price, DAY(ev_date_start) as jour, MONTH(ev_date_start) as mois, YEAR(ev_date_start) annee, ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJour FROM EVENTS";
+  $req = "SELECT ev_id, ev_lo_id, ev_th_id, ev_name, ev_price, DAY(ev_date_start) as jour, MONTH(ev_date_start) as mois, YEAR(ev_date_start) annee, ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJour FROM EVENTS";
 
   // if ($_POST['theme'] != 0) {
   //   $id = $_POST['theme'];
@@ -91,10 +91,10 @@
     </div>
 
     <div class="search-bar-date">
-      <input class="form-control" type="date">
+      <input class="form-control" type="date" name="date">
     </div>
     <div class= "search-bar-locations"> 
-      <select class="form-control search-slt">
+      <select class="form-control search-slt" name="localisation">
         <option value="0">Toutes Localisations</option>";
         <?php 
           $lieu = $bdd->prepare("SELECT * FROM locations");
@@ -114,15 +114,37 @@
 <!-- Fin de la barre de recherche -->
 
 <?php
+  // redéfinition de la liste des événements selon ce qu'on a recherché
   if (isset($_POST['Rechercher'])) {
     $th_id = $_POST['theme'];
-    echo $th_id;
-    if ($th_id != 0) { // Thème renseigné
+    $lo_id = $_POST['localisation'];
+    // $date = $_POST['date']; 
+
+    // Modification de la requête
+    if ($th_id != 0 or $lo_id != 0) {
       $req = $req." WHERE ";
-      $event = $bdd->prepare($req."ev_th_id = :th_id");
-      $event->bindParam(':th_id', $th_id);
-      $event->execute();
+    } 
+    if ($th_id != 0) {
+      $req = $req."ev_th_id = :th_id";
     }
+    if ($th_id != 0 and $lo_id != 0) {
+      $req = $req." AND ";
+    } 
+    if ($lo_id != 0) {
+      $req = $req."ev_lo_id = :lo_id";
+    }
+
+    $event = $bdd->prepare($req);
+
+    // Remplacement des paramètres
+    if ($th_id != 0) {
+      $event->bindParam(':th_id', $th_id);
+    }
+    if ($lo_id != 0) {
+      $event->bindParam(':lo_id', $lo_id);
+    }
+
+    $event->execute();
   }
 ?>
 
@@ -186,6 +208,7 @@
       echo '<tr>';
       echo '<th> <img align="middle" src="'.$resulat['ev_picture'].'" width=200px height=100px></th>';
       echo '<td>ev_th_id='.$resulat['ev_th_id'].'</td>';
+      echo '<td>ev_lo_id='.$resulat['ev_lo_id'].'</td>';
       echo '<td>'.$resulat['ev_name'].'</td>';
       echo '<td>'.$jour[$resulat['numJour']].' '.$resulat['jour'].' '.$mois[$resulat['mois'] - 1].' '.$resulat['annee'].' </td>';
 
