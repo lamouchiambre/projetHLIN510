@@ -83,7 +83,8 @@ session_start();
 <?php 
 	try{
 		//echo $_POST['login-submit'];
-		$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+		//$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+		$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
 	}catch(PDOException $e){
 		echo $e->getMessage();
 		die("Connexion impossible");
@@ -151,8 +152,10 @@ session_start();
 											echo "je suis reconnue </br>";
 											$_SESSION['us_email'] = $user;
 											$_SESSION['us_id'] = $resultat['us_id']; 
+											$_SESSION['us_role'] = $resultat['us_role'];
 											echo $_SESSION['us_id'];
 											echo $_SESSION['us_email'];
+											echo $_SESSION['us_role'];
 											
 										}else {
 											echo "je ne suis pas reconnue </br>";
