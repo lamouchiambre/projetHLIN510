@@ -46,40 +46,26 @@
   </div>
 </nav>
 <!-- Fin du menu -->
-<!-- Script php -->
+<!-- Script php pour la requête -->
 <?php 
   $mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   $jour = ["dimanche","lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
   // $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
   $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
   $req = "SELECT ev_id, ev_lo_id, ev_th_id, ev_name, ev_price, 
+    lo_id, lo_name, lo_address, lo_city, lo_gps_lat, lo_gps_long,
     DATE_FORMAT(ev_date_start, '%Y-%m-%d') AS date_debut, 
     DATE_FORMAT(ev_date_end, '%Y-%m-%d') AS date_fin, 
     DAY(ev_date_start) as jour_debut, MONTH(ev_date_start) as mois_debut, YEAR(ev_date_start) annee_debut, 
     DAY(ev_date_end) as jour_fin, MONTH(ev_date_end) as mois_fin, YEAR(ev_date_end) annee_fin, 
     ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJourDebut, 
     DATE_FORMAT(ev_date_end, '%w' ) as numJourFin 
-    FROM EVENTS";
-
-  // if ($_POST['theme'] != 0) {
-  //   $id = $_POST['theme'];
-  //   $req = $req.' WHERE id='.$id;
-  // }
+    FROM Events, Locations WHERE ev_lo_id = lo_id";
 
   $event = $bdd->prepare($req);
   $event->execute();
-
-  // if (isset($_POST['Rechercher'])) {
-  //   $req = "SELECT ev_id, ev_th_id, ev_name, ev_price, DAY(ev_date_start) as jour, MONTH(ev_date_start) as mois, YEAR(ev_date_start) annee, ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJour FROM Events WHERE ev_th_id = ?";
-    
-  //   $event->execute(array($_POST['theme']));
-  //   echo "(test) req = ".$req;
-    
-  // } else {
-    // $event->execute();
-  // }
 ?>
-<!-- Fin script -->
+<!-- Fin script pour la requête -->
 <!-- Début de la barre de recherche -->
 <form  method = "post">
 <div class="bloc" id="bloc-search-bar">
@@ -89,7 +75,7 @@
       <select class="form-control search-slt" name="theme">
         <option value="0">Tous Thèmes</option>";
         <?php 
-          $theme = $bdd->prepare("SELECT * FROM THEME");
+          $theme = $bdd->prepare("SELECT * FROM Theme");
           $theme->execute();
           while($res = $theme->fetch()){
             echo "<option value='".$res['th_id']."'>".$res['th_name']."</option>";
@@ -105,7 +91,7 @@
       <select class="form-control search-slt" name="localisation">
         <option value="0">Toutes Localisations</option>";
         <?php 
-          $lieu = $bdd->prepare("SELECT * FROM locations");
+          $lieu = $bdd->prepare("SELECT * FROM Locations");
           $lieu->execute();
           while($res = $lieu->fetch()){
             echo "<option value='".$res['lo_id']."'>".$res['lo_name']."</option>";
@@ -130,7 +116,7 @@
 
     // Modification de la requête
     if ($th_id != 0 or $lo_id != 0 or $date) {
-      $req = $req." WHERE ";
+      $req = $req." AND ";
     } 
     if ($th_id != 0) {
       $req = $req."ev_th_id = :th_id";
@@ -149,19 +135,25 @@
     }
 
     $event = $bdd->prepare($req);
+    $map_event = $bdd->prepare($req);
 
     // Remplacement des paramètres
     if ($th_id != 0) {
       $event->bindParam(':th_id', $th_id);
+      $map_event->bindParam(':th_id', $th_id);
     }
     if ($lo_id != 0) {
       $event->bindParam(':lo_id', $lo_id);
+      $map_event->bindParam(':lo_id', $lo_id);
     }
     if ($date) {
       $event->bindParam(':date', $date);
+      $map_event->bindParam(':date', $date);
     }
 
     $event->execute();
+    $map_event->execute();
+    echo $req;
   }
 ?>
 
@@ -179,26 +171,21 @@
       // var marker = L.marker([43.6, 3.8833]).addTo(mymap);
       // marker.bindPopup("<b>text du haut</b><br>text du bas").openPopup();
 
-      <?php 
-        // if (isset($_POST['Rechercher'])) {
-        //   $th_id = $_POST['theme'];
-        //   if ($th_id != 0) { // Thème renseigné
-        //     $lieu = $bdd->prepare("SELECT * FROM LOCATIONS; ");
-        //     $lieu->bindParam(':th_id', $th_id);
-        //     $lieu->execute();
-        //     while ($r = $lieu->fetch()){
-        //       echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
-        //         bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."');";
-        //     } 
-        //   }
-        // } else {        
-          $lieu = $bdd->prepare("SELECT * FROM locations");
-          $lieu->execute();
-          while ($r = $lieu->fetch()){
-            echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
-              bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."');";
+      <?php      
+        $lieu = $bdd->prepare("SELECT * FROM locations");
+        $lieu->execute();
+        $var_lo_id = 0;
+        while ($r = $lieu->fetch()) {
+          echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
+            bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<br>---";
+            $var_lo_id = $var_lo_id + 1;
+          while ($e = $map_event->fetch()) {
+            if ($e['ev_lo_id'] == $var_lo_id) {
+              echo "<br>".$e['ev_id'].' '.$e['ev_th_id'].' '.$e['ev_lo_id'].' '.$e['ev_name'].' '.$e['ev_price'].'€';
+            }
           }
-      //   }
+          echo "');";
+        }
       ?>
     }
   </script>
