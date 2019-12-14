@@ -101,7 +101,7 @@ input {
 	margin: 0;
 	border-radius: 5px;
 }
-#mapid { 
+#mapid, #lieu_mapid { 
   height: 480px; 
 }
 th {
