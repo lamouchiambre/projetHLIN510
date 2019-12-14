@@ -148,7 +148,6 @@
 		}
 
 		$event->execute();
-		// echo $req;
 	}
 ?>
 
@@ -175,9 +174,6 @@
 
 					// Redéfinition de la liste des événements selon ce qu'on a recherché
 					if (isset($_POST['Rechercher'])) {
-						// $th_id = $_POST['theme'];
-						// $lo_id = $_POST['localisation'];
-						// $date = $_POST['date']; 
 
 						// Modification de la requête
 						if ($th_id != 0 or $lo_id != 0 or $date) {
@@ -214,7 +210,6 @@
 						$map_event->bindParam(':var_lo_id', $var_lo_id);
 
 						$map_event->execute();
-						// echo $req;
 					}
 					while ($e = $map_event->fetch()) {
 						echo "<br>".$e['ev_id'].' '.$e['ev_th_id'].' '.$e['ev_lo_id'].' '.$e['ev_name'].' '.$e['ev_price'].'€';
