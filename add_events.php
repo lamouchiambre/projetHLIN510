@@ -43,9 +43,7 @@ echo $_SESSION['us_id'];
     </div>
   </div>
 </nav>
-<script>
 
-</script>
 <!-- Fin du menu -->
 <?php 
   echo "<h1>bienvenue".$_SESSION['us_id']." </h1>"
@@ -61,7 +59,8 @@ echo $_SESSION['us_id'];
         <label for = "theme"> Saissir le theme </label>
         <select class="form-control" name = "theme" id="theme">
         <?php 
-            $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+            //$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+            $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
             $theme = $bdd->prepare("SELECT * FROM THEME");
             $theme->execute();
             while($resulat = $theme->fetch()){
@@ -116,7 +115,7 @@ echo $_SESSION['us_id'];
 </form>
 <?php 
     try{
-        $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+        $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
     } catch(Exception $e){
         die("Impossible de se connectée".$e->getMessage());
     }
