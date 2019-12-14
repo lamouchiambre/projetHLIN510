@@ -71,11 +71,16 @@ session_start();
 					attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 				}).addTo(lieu_map);
 
-				var lieu_marker = L.marker([43.6, 3.8833],{
-					draggable: true
-				}).addTo(lieu_map).
-					bindPopup(['43.6, 3.8833']);
-				// console.log(lieu_marker.pos);
+				var lieu_marker = L.marker([43.6, 3.8833], {
+    			draggable: true
+					, autoPan: true
+					, autoPanSpeed: 2
+					}).addTo(lieu_map);
+					
+				lieu_marker.on("mouseover", function(e) {
+					var gps = lieu_marker.getLatLng();
+					lieu_marker.bindPopup("<b>"+gps+"</b>");
+				});
 			}
 		</script>
 	</div>
