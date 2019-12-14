@@ -49,7 +49,7 @@
 <!-- Script php -->
 <?php 
   $mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-  $jour = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
+  $jour = ["dimanche","lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
   // $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
   $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
   $req = "SELECT ev_id, ev_lo_id, ev_th_id, ev_name, ev_price, 
@@ -129,7 +129,7 @@
     $date = $_POST['date']; 
 
     // Modification de la requête
-    if ($th_id != 0 or $lo_id != 0) {
+    if ($th_id != 0 or $lo_id != 0 or $date) {
       $req = $req." WHERE ";
     } 
     if ($th_id != 0) {
@@ -145,10 +145,7 @@
     	$req = $req." AND ";
     }
     if ($date) {
-      echo $date;
-      // $req = $req.":date >= ev_date_start AND :date <= ev_date_end";
       $req = $req.":date BETWEEN ev_date_start AND ev_date_end";
-      // $req = $req.":date == ev_date_start OR :date2 == ev_date_end";
     }
 
     $event = $bdd->prepare($req);
