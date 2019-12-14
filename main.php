@@ -167,10 +167,9 @@
 				$lieu->execute();
 				$var_lo_id = 0;
 				while ($r = $lieu->fetch()) {
-					echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
-						bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<br>---";
 					$var_lo_id = $var_lo_id + 1;
 					$map_req = "SELECT * FROM Events, Locations WHERE ev_lo_id = lo_id AND lo_id = :var_lo_id";
+					echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]";
 
 					// Redéfinition de la liste des événements selon ce qu'on a recherché
 					if (isset($_POST['Rechercher'])) {
@@ -196,21 +195,34 @@
 						}
 
 						$map_event = $bdd->prepare($map_req);
+						$map_event_vide = $bdd->prepare($map_req);
 
 						// Remplacement des paramètres
 						if ($th_id != 0) {
 							$map_event->bindParam(':th_id', $th_id);
+							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						if ($lo_id != 0) {
 							$map_event->bindParam(':lo_id', $lo_id);
+							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						if ($date) {
 							$map_event->bindParam(':date', $date);
+							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						$map_event->bindParam(':var_lo_id', $var_lo_id);
+						$map_event_vide->bindParam(':var_lo_id', $var_lo_id);
 
 						$map_event->execute();
+						$map_event_vide->execute();
 					}
+
+					if (($vide = $map_event_vide->fetch()) == NULL) {
+						echo ", {opacity: 0.5}";
+					}
+
+					echo ").addTo(mymap).bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<br>---";
+
 					while ($e = $map_event->fetch()) {
 						echo "<br>".$e['ev_id'].' '.$e['ev_th_id'].' '.$e['ev_lo_id'].' '.$e['ev_name'].' '.$e['ev_price'].'€';
 					}
