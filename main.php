@@ -1,3 +1,7 @@
+<?php 
+session_start();
+$connecter = isset($_SESSION['us_id']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,26 +28,38 @@
 
 <!-- Début du menu -->
 <nav class="navbar navbar-inverse">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>                        
-			</button>
-			<img class="logo" src="img/logoMtp.png">
-		</div>
-		<div class="collapse navbar-collapse" id="myNavbar">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Acceuil</a></li>
-				<li><a href="#">A propos</a></li>
-				<li><a href="#">Nous contacter</a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-			</ul>
-		</div>
-	</div>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <img class="logo" src="img/logoMtp.png">
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="main.php">Acceuil</a></li>
+        <li><a href="#">A propos</a></li>
+        <li><a href="#">Nous contacter</a></li>
+        <?php 
+          if($connecter){
+            echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
+          }
+        ?>
+      </ul>
+      <?php 
+
+        if(!$connecter){
+          echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
+        }else{
+          echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
+        }
+        
+      ?>
+
+    </div>
+  </div>
 </nav>
 <!-- Fin du menu -->
 <!-- Script php pour la requête -->
@@ -167,9 +183,10 @@
 				$lieu->execute();
 				$var_lo_id = 0;
 				while ($r = $lieu->fetch()) {
+					echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
+						bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<br>---";
 					$var_lo_id = $var_lo_id + 1;
 					$map_req = "SELECT * FROM Events, Locations WHERE ev_lo_id = lo_id AND lo_id = :var_lo_id";
-					echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]";
 
 					// Redéfinition de la liste des événements selon ce qu'on a recherché
 					if (isset($_POST['Rechercher'])) {
@@ -195,34 +212,21 @@
 						}
 
 						$map_event = $bdd->prepare($map_req);
-						$map_event_vide = $bdd->prepare($map_req);
 
 						// Remplacement des paramètres
 						if ($th_id != 0) {
 							$map_event->bindParam(':th_id', $th_id);
-							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						if ($lo_id != 0) {
 							$map_event->bindParam(':lo_id', $lo_id);
-							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						if ($date) {
 							$map_event->bindParam(':date', $date);
-							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						$map_event->bindParam(':var_lo_id', $var_lo_id);
-						$map_event_vide->bindParam(':var_lo_id', $var_lo_id);
 
 						$map_event->execute();
-						$map_event_vide->execute();
 					}
-
-					if (($vide = $map_event_vide->fetch()) == NULL) {
-						echo ", {opacity: 0.5}";
-					}
-
-					echo ").addTo(mymap).bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<br>---";
-
 					while ($e = $map_event->fetch()) {
 						echo "<br>".$e['ev_id'].' '.$e['ev_th_id'].' '.$e['ev_lo_id'].' '.$e['ev_name'].' '.$e['ev_price'].'€';
 					}
