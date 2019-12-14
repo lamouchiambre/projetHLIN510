@@ -37,12 +37,13 @@ echo $connecter;
         <li><a href="#">A propos</a></li>
         <li><a href="#">Nous contacter</a></li>
         <?php 
-          if($_SESSION['us_role'] = 'administrator'){
-            echo '<li><a href="add_events.php">Ajouter un evenement</a></li>';
+          if($connecter){
+            echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
           }
         ?>
       </ul>
       <?php 
+
         if(!$connecter){
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
         }else{
@@ -88,7 +89,7 @@ echo $connecter;
       if($connecter){
         echo "<form action='' method='post'>
         <input type='hidden' name='id' value=".$name. ">
-        <input type='submit' class='btn btn-primary' name='inscritption' value='inscription'>";
+        <input type='submit' class='btn btn-primary' name='inscritption' value='inscription' onclick=alert('Vous êtes inscrit');>";
       }
     }
     if(isset($_POST['inscritption'])){
