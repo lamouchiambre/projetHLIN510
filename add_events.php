@@ -20,7 +20,6 @@ echo $_SESSION['us_id'];
 <body>
 
 <!-- Début du menu -->
-
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -36,10 +35,22 @@ echo $_SESSION['us_id'];
         <li class="active"><a href="main.php">Acceuil</a></li>
         <li><a href="#">A propos</a></li>
         <li><a href="#">Nous contacter</a></li>
+        <?php 
+          if(!empty($_SESSION['us_id'])){
+            echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
+          }
+        ?>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
+      <?php 
+
+        if(empty($_SESSION['us_id'])){
+          echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
+        }else{
+          echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
+        }
+        
+      ?>
+
     </div>
   </div>
 </nav>
@@ -82,6 +93,7 @@ echo $_SESSION['us_id'];
         <select>
     </div>
     <div class = "form">
+        <label for ="prix"> Le prix :</label> 
         <input type="number" name="prix" id="prix" step="1" value="0" min="0">
     </div>
     <div class = "form">
@@ -101,14 +113,14 @@ echo $_SESSION['us_id'];
         <input type="time" name="heure_fin" id="heure_fin">
     </div>
     <div class="form">
-    <label for="description">Saisir description</label>
-    <textarea class="form-control" id="description" name ="description" rows="3"></textarea>
+      <label for="description">Saisir description</label>
+      <textarea class="form-control" id="description" name ="description" rows="3"></textarea>
   </div>
   <div class = "form">
-  <label for="avatar">Mettre une image:</label>
-    <input type="file"
-       id="img" name="img"
-       accept="image/png, image/jpeg">
+    <label for="avatar">Mettre une image:</label>
+      <input type="file"
+        id="img" name="img"
+        accept="image/png, image/jpeg">
   </div>
   <input type='submit' class='btn btn-primary' name='ajouter' value='ajouter'>
   

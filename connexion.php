@@ -62,22 +62,7 @@ session_start();
     </div>
   </div>
 </nav>
-<!-- Fin du menu -->
 
-    <!-- <div class="col-lg-3 col-lg-offset-1">
-    <form >
-  <legend>Légende</legend>
-    <div class="form-group">
-      <label for="texte">Mail : </label>
-      <input id="email" type="email" class="form-control">
-    </div>
-    <div class="form-group">
-      <label for="text">Mots de passe : </label>
-      <input type="text" classe = "from-control">
-    </div>
-    <button type="button" class="btn btn-success btn-block" >Envoyer</button>
-</form>
-</div> -->
 
 <div class="container">
 <?php 
@@ -107,7 +92,7 @@ session_start();
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="login-form" action="" method="post" role="form" style="display: block;">
+								<form id="login-form" action="espace_menbre.php" method="post" role="form" style="display: block;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -136,33 +121,6 @@ session_start();
 									</div>
 								</form>
 								<?php 
-								
-									if (isset($_POST['login-submit'])) {
-										//echo "popo";
-										$user = $_POST['username'];
-										$mdp = $_POST['password'];
-
-										$connexion = $bdd->prepare("SELECT * FROM USER WHERE us_email = :user");
-										$connexion->bindParam(':user',$user);
-										
-										$connexion->execute();
-										$resultat = $connexion->fetch();
-										$isPasswordCorrect = password_verify($mdp, $resultat['us_password']);
-										if($isPasswordCorrect){
-											echo "je suis reconnue </br>";
-											$_SESSION['us_email'] = $user;
-											$_SESSION['us_id'] = $resultat['us_id']; 
-											$_SESSION['us_role'] = $resultat['us_role'];
-											echo $_SESSION['us_id'];
-											echo $_SESSION['us_email'];
-											echo $_SESSION['us_role'];
-											
-										}else {
-											echo "je ne suis pas reconnue </br>";
-											
-										}
-				
-									}
 
 								?>
 
