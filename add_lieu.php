@@ -60,10 +60,17 @@ session_start();
 </nav>
 <!-- Fin du menu -->
 
+<?php
+	// $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+	$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+?>
+
 <!-- Début de la map -->
-<div class="bloc" id="lieu_bloc-map">
+<div class='bloc' id='lieu_bloc-map'>
+	<h2>Lieux enregistrés</h2>
 	<div id="lieu_mapid"></div>
 		<script>
+
 			window.onload = function() {
 				var lieu_map = L.map('lieu_mapid').setView([43.6, 3.8833], 13);
 
@@ -72,22 +79,105 @@ session_start();
 				}).addTo(lieu_map);
 
 				var lieu_marker = L.marker([43.6, 3.8833], {
-    			draggable: true
-					, autoPan: true
-					, autoPanSpeed: 2
-					}).addTo(lieu_map);
+					draggable: true
+					, opacity: 0.75
+				}).addTo(lieu_map);
+				// lieu_marker.valueOf()._icon.style.backgroundColor = 'purple';
 					
 				lieu_marker.on("mouseover", function(e) {
 					var gps = lieu_marker.getLatLng();
-					lieu_marker.bindPopup("<b>"+gps+"</b>");
+					lieu_marker.bindPopup("<b>"+gps+"</b>").openPopup();
 				});
+
+				<?php
+					$lieu = $bdd->prepare("SELECT * FROM locations");
+					$lieu->execute();
+					while ($r = $lieu->fetch()) {
+						echo "var m = L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."],{opacity:1}).addTo(lieu_map);";
+						echo "m.bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."');";
+					}
+				?>
 			}
 		</script>
 	</div>
 </div>
 <!-- Fin de la map -->
 
+<!-- Début formulaire -->
+<div class='bloc'>
+	<h2>Ajouter un lieu</h2>
+	<div class='form'>
+		<input type='textbox' name='name' id='name' placeholder='Nom'>
+		<br>
+		<input type='textbox' name='address' id='address' placeholder='Adresse'>
+		<br>
+		<input type='textbox' name='city' id='city' placeholder='Ville'>
+		<br>
+		<br>
+		<input type='number' name='lat' id='lat' placeholder='Latitude'>
+		<br>
+		<input type='number' name='long' id='long' placeholder='Longitude'>
+		<p>(Aidez-vous du marqueur déplaçable)</p>
+  </div>
+	<input type='submit' class='btn btn-primary' name='ajouter' value='Ajouter'>
+</div>
+<!-- Fin formulaire -->
+
+<!-- Début du submit -->
+<?php 
+//     try{
+//         $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+//     } catch(Exception $e){
+//         die("Impossible de se connectée".$e->getMessage());
+//     }
+//     if (!empty($_POST)){
+//         try{
+//             $name = $_FILES['img']['name'];
+//             if(!empty($name)){
+//               echo $name;
+//               //echo $_POST['img'];
+//               $data = file_get_contents($_FILES['img']['tmp_name']);
+//               $target = "img/events/".basename($name);
+//               if (move_uploaded_file($_FILES['img']['tmp_name'], $target)){
+//                 echo "true";
+//               }
+//             }
+            
+//             $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+//             $bdd->beginTransaction();
+//             $p = $bdd->prepare("INSERT INTO `events` (`ev_id`, `ev_lo_id`, `ev_th_id`, `ev_name`, `ev_price`, `ev_date_start`, `ev_date_end`, `ev_start_time`, `ev_end_time`, `ev_nb_people_min`, `ev_nb_people_max`, `ev_descriptive`, `ev_average`, `ev_picture`) VALUES (NULL, :theme, :lieu, :nom, :prix, :date_deb, :date_fin, :heur_deb, :heur_fin, NULL, NULL,:descr,NULL, :img)");
+//             $p->bindParam(':theme', $_POST['theme']);
+//             $p->bindParam(':lieu', $_POST['lieu']);
+//             $p->bindParam(':nom', $_POST['nom']);
+//             $p->bindParam(':prix', $_POST['prix']);
+//             $p->bindParam(':date_deb', $_POST['date_deb']);
+//             $p->bindParam(':date_fin', $_POST['date_fin']);
+//             $p->bindParam(':heur_deb', $_POST['heure_deb']);
+//             $p->bindParam(':heur_fin', $_POST['heure_fin']);
+//             $p->bindParam(':descr', $_POST['description']);
+//             //$image;
+//             $p->bindParam(':img',$image);
+//             if (empty($name)) {
+//                 $image = "img/events/default.jpg";
+//                 echo "non";
+//             }else{
+//                 $image = "img/events/".$name;
+//                 echo "oui";
+//             }
+//             $p->execute();
+//             $bdd->commit();
+    
+//         } catch(Exception $e){
+//             $bdd->rollBack();
+//             echo "impossible ajouter".$e->getMessage();    
+//         }
+// }
+
+?>
+<!-- Fin du submit -->
+
 <!-- Début du footer -->
+<br>
 <footer class="container-fluid text-center" id="footer">
 	<p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
 </footer>
