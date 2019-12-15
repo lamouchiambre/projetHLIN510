@@ -98,31 +98,31 @@ if (isset($_POST['login-submit'])) {
         <h4 class="card-title">Gere mon compte</h4>
         <p class="card-text">Changer de mot de passe</p>
         <p class="card-text">Gere ses inscriptions</p>
-        <a href="#" class="btn btn-primary">Go</a>
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
-    <div class="card text-white bg-dark mb-3">
-      <div class="card-body">
-        <h4 class="card-title">Gerer les Compte</h4>
-        <p class="card-text"><a href="add_contributeur.php">Ajouter/Supprimer les contribueurs</a></p>
-        <p class="card-text"><a href = "sup_compte.php"> Supprimer les comptes</a></p>
-        <a href="#" class="btn btn-primary">Go</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Gerer les Evenement</h4>
-        <p class="card-text"><a href="add_events.php">Ajouter un nouveau evenement</a></p>
-        <p class="card-text"><a href = "add_lieu.php">Ajouter un nouveau lieu.</p>
-        <p class="card-text"><a href="add_theme.php">Ajouter un nouveau thème</a></p>
-        <a href="#" class="btn btn-primary">Go</a>
-      </div>
-    </div>
-  </div>
+      <?php 
+      if ($_SESSION['us_role'] != 'visitor') {
+        if ($_SESSION['us_role']=='administrator') {
+          echo '<div class="col-sm-6"> <div class="card text-white bg-dark mb-3">
+            <div class="card-body"> <h4 class="card-title">Gerer les Compte</h4>            <p class="card-text"><a href="add_contributeur.php">Ajouter/Supprimer les contribueurs</a></p>            <p class="card-text"><a href = "sup_compte.php"> Supprimer les comptes</a></p>                      </div>        </div>      </div>';
+        }
+      
+      
+        echo '<div class="col-sm-6">';
+        echo '<div class="card">';
+        echo '<div class="card-body">';
+        echo '<h4 class="card-title">Gerer les Evenement</h4>';
+        echo '<p class="card-text"><a href="add_events.php">Ajouter un nouveau evenement</a></p>';
+          if ($_SESSION['us_role']=='administrator') {
+            echo '<p class="card-text"><a href = "add_lieu.php">Ajouter un nouveau lieu.</p> <p class="card-text"><a href="add_theme.php">Ajouter un nouveau thème</a></p>';
+          }
+          
+          // <a href="#" class="btn btn-primary">Go</a>
+        echo '</div></div></div>';
+      }
+      ?>
+  
 </div>
 
 <?php 
