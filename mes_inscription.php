@@ -88,44 +88,6 @@ if (isset($_POST['login-submit'])) {
 <!-- Fin du menu -->
 <div class = 'bloc'>
 <?php 
-  echo "<h1>Bienvenue ".$_SESSION['us_first_name'].' '.$_SESSION['us_last_name']." </h1>"
-?>
-    <h4> Que voulez vous faire aujourd'hui ?</h4>
-<div class="row">
-    <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Gere mon compte</h4>
-        <p class="card-text">Changer de mot de passe</p>
-        <p class="card-text">Gere mes inscriptions</p>
-      </div>
-    </div>
-  </div>
-      <?php 
-      if ($_SESSION['us_role'] != 'visitor') {
-        if ($_SESSION['us_role']=='administrator') {
-          echo '<div class="col-sm-6"> <div class="card text-white bg-dark mb-3">
-            <div class="card-body"> <h4 class="card-title">Gerer les Compte</h4>            <p class="card-text"><a href="add_contributeur.php">Ajouter/Supprimer les contribueurs</a></p>            <p class="card-text"><a href = "sup_compte.php"> Supprimer les comptes</a></p>                      </div>        </div>      </div>';
-        }
-      
-      
-        echo '<div class="col-sm-6">';
-        echo '<div class="card">';
-        echo '<div class="card-body">';
-        echo '<h4 class="card-title">Gerer les Evenement</h4>';
-        echo '<p class="card-text"><a href="add_events.php">Ajouter un nouveau evenement</a></p>';
-          if ($_SESSION['us_role']=='administrator') {
-            echo '<p class="card-text"><a href = "add_lieu.php">Ajouter un nouveau lieu.</p> <p class="card-text"><a href="add_theme.php">Ajouter un nouveau thème</a></p>';
-          }
-          
-          // <a href="#" class="btn btn-primary">Go</a>
-        echo '</div></div></div>';
-      }
-      ?>
-  
-</div>
-
-<?php 
     try{
         $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
     } catch(Exception $e){
@@ -133,6 +95,44 @@ if (isset($_POST['login-submit'])) {
     }
 
 ?>
+<h3>Mes inscription</h3>
+<form action = 'mes_inscription.php' method='post'>
+    <table >
+        <thead>
+        <tr>
+            <th></th>
+            <th>Nom</th>
+            <th>Date</th>
+            <th>Heure</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php 
+            $ins_all = $bdd->prepare("SELECT * FROM EVENTS, REGISTER  WHERE re_ev_id = ev_id AND re_us_id = ?");
+            $ins_all->execute(array($_SESSION['us_id']));
+            while($r = $ins_all->fetch()){
+                echo "<tr>";
+                echo "<td><input type='checkbox' name = events_id[] value =".$r['ev_id']."></td>";
+                echo "<td>".$r['ev_name']."</td>";
+                echo "<td>".$r['ev_date_start']."</td>";
+                echo "<td>".$r['ev_start_time']."</td>";
+                echo "</tr>";
+            }
+            if (!empty($_POST['Desincrire'])){
+                $events = $_POST['events_id'];
+                for ($i=0; $i < count($events); $i++) { 
+                    $t = $bdd->prepare("DELETE FROM `register` WHERE re_us_id = ? AND re_ev_id = ?");
+                    $t->execute(array($_SESSION['us_id'], $events[$i]));
+                }
+                
+            }
+        ?>
+        </tbody>
+    </table>
+    <input type='submit' class='btn btn-primary' name='Desincrire' value='Desincrire'>
+</form>
+
+
 </div>
 
 <!-- Début du footer -->

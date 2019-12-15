@@ -105,12 +105,13 @@ $connecter = isset($_SESSION['us_id']);
             <input type='submit' class='btn btn-primary' name='inscritption' value='inscription' onclick=alert('Vous êtes inscrit');>";
           }
         }else{
-          if ($deja_rate==0) {
+          if ($deja_rate==1) {
             echo "<form action='' method='post'>";
             echo"<h3>L'evenement est passer vous pouvait noter l'evenemnt</h3>";
             echo '<div class="form"><label>Noter levenement</label><input type="number" name="note" min="0" max="10"></div>';
-            echo'<div class="form"><label for="commentaire">Saisir commentaire</label> <textarea class="form-control" name ="commentaire" rows="3"></textarea></div>';
-            echo "<input type='submit' class='btn btn-primary' name='noter' value='noter'> </form>";
+            //echo'<div class="form"><label for="commentaire">Saisir commentaire</label> <textarea class="form-control" name ="commentaire" rows="3"></textarea></div>';
+            //echo "<input type='submit' class='btn btn-primary' name='noter' value='noter'>"; 
+            echo "</form>";
           }
         }
       }
