@@ -1,7 +1,6 @@
 <?php 
 session_start();
 $connecter = isset($_SESSION['us_id']);
-echo $connecter;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -69,9 +68,11 @@ echo $connecter;
     $register->bindParam(':ev_id', $name);
     $register->execute();
 
+    $rate = $bdd->prepare("SELECT * FROM `rate` WHERE `ra_us_id` = ? AND `ra_ev_id` = ?");
+    $rate->execute(array($_SESSION['us_id'], $name));
+    $deja_rate = $rate->rowCount();
     $event = $bdd->prepare("SELECT * FROM EVENTS WHERE ev_id = ?");
     $event->execute(array($name));
-    $event2 = $event;
     
     $passer = false;
     while($resulat = $event->fetch()){
@@ -82,9 +83,17 @@ echo $connecter;
         echo "<img src=".$resulat['ev_picture']." class='img-fluid' width = 790px>";
         echo $resulat['ev_descriptive'];
     }
-    
+    $avg_rate = $bdd->prepare('SELECT AVG(ra_rating) AS moyenne FROM `rate` WHERE `ra_ev_id`= ?');
+    $avg_rate->execute(array($name));
+    echo "</br>";
+    if (!$rate) {
+      while($resulat = $avg_rate->fetch()){
+        echo "La note moyenne des gens : ".$resulat['moyenne']."/10 </br>";
+      }
+    }
 
-      if($connecter){
+
+    if($connecter){
         if(!$passer){
           if ( $register->rowCount()!=0) {
             echo "<form action='' method='post'>
@@ -96,7 +105,13 @@ echo $connecter;
             <input type='submit' class='btn btn-primary' name='inscritption' value='inscription' onclick=alert('Vous êtes inscrit');>";
           }
         }else{
-        echo "Donner une note";
+          if ($deja_rate==0) {
+            echo "<form action='' method='post'>";
+            echo"<h3>L'evenement est passer vous pouvait noter l'evenemnt</h3>";
+            echo '<div class="form"><label>Noter levenement</label><input type="number" name="note" min="0" max="10"></div>';
+            echo'<div class="form"><label for="commentaire">Saisir commentaire</label> <textarea class="form-control" name ="commentaire" rows="3"></textarea></div>';
+            echo "<input type='submit' class='btn btn-primary' name='noter' value='noter'> </form>";
+          }
         }
       }
     if(isset($_POST['inscritption'])){
@@ -116,7 +131,20 @@ echo $connecter;
       {
       echo "<br>" . $e->getMessage();
       }
-
+    }
+  
+    if(isset($_POST['noter'])) {
+      try{
+        echo "yolo";
+        $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+        $bdd->beginTransaction();
+        $now = date("Y-m-d");
+        $note = $bdd->prepare("INSERT INTO `rate`(`ra_date`, `ra_rating`, `ra_us_id`, `ra_ev_id`) VALUES (?,?,?,?)");
+        $note->execute(array($now,$_POST['note'], $_SESSION['us_id'], $name));
+        $bdd->commit();
+      }catch(PDOException $e){
+        echo "<br>" . $e->getMessage();
+      }
     }
     if(isset($_POST['deinscritption'])){
       echo "je me suis deinscrit";
@@ -132,14 +160,7 @@ echo $connecter;
       {
       echo "<br>" . $e->getMessage();
       }
-    }
-
-
-      
-    
-    
-
-    
+  }
 ?>
 </div>
 

@@ -107,7 +107,7 @@ if (isset($_POST['login-submit'])) {
       <div class="card-body">
         <h4 class="card-title">Gerer les Compte</h4>
         <p class="card-text"><a href="add_contributeur.php">Ajouter/Supprimer les contribueurs</a></p>
-        <p class="card-text">Supprimer les comptes</p>
+        <p class="card-text"><a href = "sup_compte.php"> Supprimer les comptes</a></p>
         <a href="#" class="btn btn-primary">Go</a>
       </div>
     </div>
