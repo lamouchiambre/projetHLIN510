@@ -1,6 +1,6 @@
 <?php 
 session_start();
-
+$connecter = isset($_SESSION['us_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,14 +36,14 @@ session_start();
         <li><a href="#">A propos</a></li>
         <li><a href="#">Nous contacter</a></li>
         <?php 
-          if(!empty($_SESSION['us_id'])){
+          if($connecter){
             echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
           }
         ?>
       </ul>
       <?php 
 
-        if(empty($_SESSION['us_id'])){
+        if(!$connecter){
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
         }else{
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
@@ -57,6 +57,7 @@ session_start();
 
 <!-- Fin du menu -->
 <div class = 'bloc'>
+<h2> Ajouter des membre contributeur </h2>
 <form action = 'add_contributeur.php' method='get'>
 <table >
     <thead>
@@ -87,6 +88,7 @@ session_start();
   </table>
   <input type='submit' class='btn btn-primary' name='valider' value='valider'>
 </form>
+<h2> Supprimer des contributeur</h2>
 <form action = 'add_contributeur.php' method='get'>
     <table >
         <thead>

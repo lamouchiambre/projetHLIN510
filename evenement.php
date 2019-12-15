@@ -71,27 +71,34 @@ echo $connecter;
 
     $event = $bdd->prepare("SELECT * FROM EVENTS WHERE ev_id = ?");
     $event->execute(array($name));
+    $event2 = $event;
     
-    
+    $passer = false;
     while($resulat = $event->fetch()){
+      if($resulat['ev_date_end']<=date("Y-m-d")){
+        $passer = true;
+      }
         echo  "<h1>".$resulat['ev_name']."</h1>";
         echo "<img src=".$resulat['ev_picture']." class='img-fluid' width = 790px>";
         echo $resulat['ev_descriptive'];
     }
-    if ( $register->rowCount()!=0) {
-      echo $register->rowCount();
-      echo "<form action='' method='post'>
-      <input type='hidden' name='id' value=".$name. ">
-      <input type='submit' class='btn btn-primary' name='deinscritption' value='deinscription'>";
-      
-    }
-    else{
+    
+
       if($connecter){
-        echo "<form action='' method='post'>
-        <input type='hidden' name='id' value=".$name. ">
-        <input type='submit' class='btn btn-primary' name='inscritption' value='inscription' onclick=alert('Vous êtes inscrit');>";
+        if(!$passer){
+          if ( $register->rowCount()!=0) {
+            echo "<form action='' method='post'>
+            <input type='hidden' name='id' value=".$name. ">
+            <input type='submit' class='btn btn-primary' name='deinscritption' value='deinscription'>";
+          }else {
+            echo "<form action='' method='post'>
+            <input type='hidden' name='id' value=".$name. ">
+            <input type='submit' class='btn btn-primary' name='inscritption' value='inscription' onclick=alert('Vous êtes inscrit');>";
+          }
+        }else{
+        echo "Donner une note";
+        }
       }
-    }
     if(isset($_POST['inscritption'])){
       echo "je me suis inscrit";
       try{
@@ -125,9 +132,14 @@ echo $connecter;
       {
       echo "<br>" . $e->getMessage();
       }
-
     }
 
+
+      
+    
+    
+
+    
 ?>
 </div>
 

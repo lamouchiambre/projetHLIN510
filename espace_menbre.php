@@ -106,7 +106,7 @@ if (isset($_POST['login-submit'])) {
     <div class="card text-white bg-dark mb-3">
       <div class="card-body">
         <h4 class="card-title">Gerer les Compte</h4>
-        <p class="card-text">Ajouter/Supprimer les contribueurs</p>
+        <p class="card-text"><a href="add_contributeur.php">Ajouter/Supprimer les contribueurs</a></p>
         <p class="card-text">Supprimer les comptes</p>
         <a href="#" class="btn btn-primary">Go</a>
       </div>
@@ -117,8 +117,8 @@ if (isset($_POST['login-submit'])) {
       <div class="card-body">
         <h4 class="card-title">Gerer les Evenement</h4>
         <p class="card-text"><a href="add_events.php">Ajouter un nouveau evenement</a></p>
-        <p class="card-text">Ajouter un nouveau lieu.</p>
-        <p class="card-text">Ajouter un nouveau thème.</p>
+        <p class="card-text"><a href = "add_lieu.php">Ajouter un nouveau lieu.</p>
+        <p class="card-text"><a href="add_theme.php">Ajouter un nouveau thème</a></p>
         <a href="#" class="btn btn-primary">Go</a>
       </div>
     </div>
