@@ -1,5 +1,6 @@
 <?php 
 session_start();
+echo $_SESSION['us_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,7 +66,7 @@ session_start();
     }
 ?>
 <h1> Gerer les themes </h1>
-    <div class="custom-control custom-checkbox">
+    <div>
     <form action = "" method="get">
         <?php 
             $th = $bdd->prepare("SELECT * FROM THEME");
@@ -73,7 +74,7 @@ session_start();
             $nb = $th->rowCount();
             
             while($r = $th->fetch()){
-                echo "<div><input type='checkbox' name = theme_id[] value =".$r['th_id'].">";
+                echo "<div><input type='checkbox' name = ".$r['th_id'].">";
                 echo "<label for=".$r['th_id'].">".$r['th_name']."</label></div>";
             }
         ?>
@@ -82,16 +83,17 @@ session_start();
   </form>
     <?php 
         if(!empty($_GET['supprimer'])){
-            $themes = $_GET['theme_id'];
-
-          for ($i=0; $i < count($themes); $i++) { 
-            $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            $bdd->beginTransaction();
-            echo $themes[$i];
-            $sup= $bdd->prepare("DELETE FROM `theme` WHERE th_id = :th_id ");
-            $sup->bindParam(":th_id", $themes[$i]);
-            $sup->execute();
-            $bdd->commit();
+            echo "blabla";
+            for ($i=1; $i < $nb+1; $i++) { 
+                if (!empty($_GET[$i])) {
+                    $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+                    $bdd->beginTransaction();
+                    $sup= $bdd->prepare("DELETE FROM `theme` WHERE th_id = :th_id ");
+                    $sup->bindParam(":th_id", $i);
+                    $sup->execute();
+                    $sup->execute();
+                    echo "sup";
+                }
             }
         }
     ?>
@@ -109,6 +111,7 @@ session_start();
             if($test->rowCount()!=0){
                 echo "Theme deja prit";
             }else{
+                echo 'jajoute';
                 $aj = $bdd->prepare("INSERT INTO `theme` (`th_id`, `th_name`) VALUES (NULL, :nom)");
                 $aj->bindParam(':nom', $_POST['new_theme']);
                 $aj->execute();

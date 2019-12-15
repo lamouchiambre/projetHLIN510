@@ -1,6 +1,6 @@
 <?php 
-session_start();
-$connecter = isset($_SESSION['us_id']);
+	session_start();
+	$connecter = isset($_SESSION['us_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,26 +43,24 @@ $connecter = isset($_SESSION['us_id']);
         <li><a href="#">A propos</a></li>
         <li><a href="#">Nous contacter</a></li>
         <?php 
-          if($connecter){
+          if ($connecter) {
             echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
           }
         ?>
       </ul>
       <?php 
-
-        if(!$connecter){
+        if (!$connecter) {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
-        }else{
+        } else {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
         }
-        
       ?>
-
     </div>
   </div>
 </nav>
 <!-- Fin du menu -->
-<!-- Script php pour la requête -->
+
+<!-- Début définition de la requête -->
 <?php 
 	$mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 	$jour = ["dimanche","lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
@@ -81,7 +79,8 @@ $connecter = isset($_SESSION['us_id']);
 	$event = $bdd->prepare($req);
 	$event->execute();
 ?>
-<!-- Fin script pour la requête -->
+<!-- Fin définition de la requête -->
+
 <!-- Début de la barre de recherche -->
 <form  method = "post">
 <div class="bloc" id="bloc-search-bar">
@@ -109,7 +108,7 @@ $connecter = isset($_SESSION['us_id']);
 				<?php 
 					$lieu = $bdd->prepare("SELECT * FROM Locations");
 					$lieu->execute();
-					while($res = $lieu->fetch()){
+					while ($res = $lieu->fetch()) {
 						echo "<option value='".$res['lo_id']."'>".$res['lo_name']."</option>";
 					}
 				?>
@@ -123,6 +122,7 @@ $connecter = isset($_SESSION['us_id']);
 </form>
 <!-- Fin de la barre de recherche -->
 
+<!-- Début prise en compte de la recherche -->
 <?php
 	// Redéfinition de la liste des événements selon ce qu'on a recherché
 	if (isset($_POST['Rechercher'])) {
@@ -166,6 +166,7 @@ $connecter = isset($_SESSION['us_id']);
 		$event->execute();
 	}
 ?>
+<!-- Fin prise en compte de la recherche -->
 
 <!-- Début de la map -->
 <div class="bloc" id="bloc-map">
@@ -183,10 +184,9 @@ $connecter = isset($_SESSION['us_id']);
 				$lieu->execute();
 				$var_lo_id = 0;
 				while ($r = $lieu->fetch()) {
-					echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]).addTo(mymap).
-						bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<br>---";
 					$var_lo_id = $var_lo_id + 1;
 					$map_req = "SELECT * FROM Events, Locations WHERE ev_lo_id = lo_id AND lo_id = :var_lo_id";
+					echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]";
 
 					// Redéfinition de la liste des événements selon ce qu'on a recherché
 					if (isset($_POST['Rechercher'])) {
@@ -212,21 +212,35 @@ $connecter = isset($_SESSION['us_id']);
 						}
 
 						$map_event = $bdd->prepare($map_req);
+						$map_event_vide = $bdd->prepare($map_req);
 
 						// Remplacement des paramètres
 						if ($th_id != 0) {
 							$map_event->bindParam(':th_id', $th_id);
+							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						if ($lo_id != 0) {
 							$map_event->bindParam(':lo_id', $lo_id);
+							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						if ($date) {
 							$map_event->bindParam(':date', $date);
+							$map_event_vide->bindParam(':th_id', $th_id);
 						}
 						$map_event->bindParam(':var_lo_id', $var_lo_id);
+						$map_event_vide->bindParam(':var_lo_id', $var_lo_id);
 
 						$map_event->execute();
+						$map_event_vide->execute();
 					}
+
+					if (($vide = $map_event_vide->fetch()) == NULL) {
+						echo ", {opacity: 0.5}";
+						echo ").addTo(mymap).bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address'];
+					} else {
+						echo ").addTo(mymap).bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<br>---";
+					}
+
 					while ($e = $map_event->fetch()) {
 						echo "<br>".$e['ev_id'].' '.$e['ev_th_id'].' '.$e['ev_lo_id'].' '.$e['ev_name'].' '.$e['ev_price'].'€';
 					}
@@ -268,8 +282,9 @@ $connecter = isset($_SESSION['us_id']);
 	?>      
 </div>
 <!-- Fin de la liste des événements -->
-<br>
+
 <!-- Début du footer -->
+<br>
 <footer class="container-fluid text-center" id="footer">
 	<p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
 </footer>
