@@ -1,6 +1,6 @@
 <?php 
-session_start();
-$connecter = isset($_SESSION['us_id']);
+	session_start();
+	$connecter = isset($_SESSION['us_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,26 +43,24 @@ $connecter = isset($_SESSION['us_id']);
         <li><a href="#">A propos</a></li>
         <li><a href="#">Nous contacter</a></li>
         <?php 
-          if($connecter){
+          if ($connecter) {
             echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
           }
         ?>
       </ul>
       <?php 
-
-        if(!$connecter){
+        if (!$connecter) {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
-        }else{
+        } else {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
         }
-        
       ?>
-
     </div>
   </div>
 </nav>
 <!-- Fin du menu -->
-<!-- Script php pour la requête -->
+
+<!-- Début définition de la requête -->
 <?php 
 	$mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 	$jour = ["dimanche","lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
@@ -81,7 +79,8 @@ $connecter = isset($_SESSION['us_id']);
 	$event = $bdd->prepare($req);
 	$event->execute();
 ?>
-<!-- Fin script pour la requête -->
+<!-- Fin définition de la requête -->
+
 <!-- Début de la barre de recherche -->
 <form  method = "post">
 <div class="bloc" id="bloc-search-bar">
@@ -109,7 +108,7 @@ $connecter = isset($_SESSION['us_id']);
 				<?php 
 					$lieu = $bdd->prepare("SELECT * FROM Locations");
 					$lieu->execute();
-					while($res = $lieu->fetch()){
+					while ($res = $lieu->fetch()) {
 						echo "<option value='".$res['lo_id']."'>".$res['lo_name']."</option>";
 					}
 				?>
@@ -123,6 +122,7 @@ $connecter = isset($_SESSION['us_id']);
 </form>
 <!-- Fin de la barre de recherche -->
 
+<!-- Début prise en compte de la recherche -->
 <?php
 	// Redéfinition de la liste des événements selon ce qu'on a recherché
 	if (isset($_POST['Rechercher'])) {
@@ -166,6 +166,7 @@ $connecter = isset($_SESSION['us_id']);
 		$event->execute();
 	}
 ?>
+<!-- Fin prise en compte de la recherche -->
 
 <!-- Début de la map -->
 <div class="bloc" id="bloc-map">
@@ -281,8 +282,9 @@ $connecter = isset($_SESSION['us_id']);
 	?>      
 </div>
 <!-- Fin de la liste des événements -->
-<br>
+
 <!-- Début du footer -->
+<br>
 <footer class="container-fluid text-center" id="footer">
 	<p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
 </footer>
