@@ -43,17 +43,17 @@ session_start();
 				<li><a href="#">A propos</a></li>
 				<li><a href="#">Nous contacter</a></li>
 				<?php
-					// if (!empty($_SESSION['us_id'])) {
-					// 	echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
-					// }
+					if (!empty($_SESSION['us_id'])) {
+						echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
+					}
 				?>
 			</ul>
 			<?php
-				// if (empty($_SESSION['us_id'])) {
-				// 	echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
-				// } else {
-				// 	echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
-				// }
+				if (empty($_SESSION['us_id'])) {
+					echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
+				} else {
+					echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
+				}
 			?>
 		</div>
 	</div>
