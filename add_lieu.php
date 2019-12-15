@@ -40,8 +40,6 @@ session_start();
 		<div class="collapse navbar-collapse" id="myNavbar">
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="main.php">Acceuil</a></li>
-				<li><a href="#">A propos</a></li>
-				<li><a href="#">Nous contacter</a></li>
 				<?php
 					if (!empty($_SESSION['us_id'])) {
 						echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
@@ -117,9 +115,38 @@ session_start();
 		</div>
 		<input type='submit' class='btn btn-primary' name='ajouter' value='Ajouter'>
 	</form>
-</div>
 <!-- Fin formulaire -->
+<h2> Supprimer un lieu </h2>
+    <div class="custom-control custom-checkbox">
+    <form action = "" method="get">
+        <?php 
+            $lo = $bdd->prepare("SELECT * FROM LOCATIONS");
+            $lo->execute();
+            $nb = $lo->rowCount();
+            
+            while($r = $lo->fetch()){
+                echo "<div><input type='checkbox' name = lieu_id[] value =".$r['lo_id'].">";
+                echo "<label for=".$r['lo_id'].">".$r['lo_name']."</label></div>";
+            }
+        ?>
+    <input type='submit' class='btn btn-primary' name='supprimer' value='supprimer'>
+  </div>
+  </form>
+    <?php 
+        if(!empty($_GET['supprimer'])){
+            $lieu = $_GET['lieu_id'];
 
+          for ($i=0; $i < count($lieu); $i++) { 
+            $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+            $bdd->beginTransaction();
+            $sup= $bdd->prepare("DELETE FROM `locations` WHERE lo_id = :lo_id ");
+            $sup->bindParam(":lo_id", $lieu[$i]);
+            $sup->execute();
+            $bdd->commit();
+            }
+        }
+	?>
+	</div>
 <!-- Début du submit -->
 <?php 
   try {

@@ -45,7 +45,7 @@ session_destroy();
   </div>
 </nav>
 <div class = 'bloc'>
-    Je suis deconnecter
+    <h1>Vous êtes déconnecté</h1>
 </div>
 
 

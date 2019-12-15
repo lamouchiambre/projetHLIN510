@@ -88,7 +88,7 @@ $connecter = isset($_SESSION['us_id']);
     echo "</br>";
     if (!$rate) {
       while($resulat = $avg_rate->fetch()){
-        echo "La note moyenne des gens : ".$resulat['moyenne']."/10 </br>";
+        echo "<h4>La note moyenne de l'évènement est : ".$resulat['moyenne']."/10 </h4></br>";
       }
     }
 
@@ -116,7 +116,7 @@ $connecter = isset($_SESSION['us_id']);
         }
       }
     if(isset($_POST['inscritption'])){
-      echo "je me suis inscrit";
+      echo "<h5>Vous êtes inscrit</h5>";
       try{
         $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         $bdd->beginTransaction();
@@ -136,7 +136,6 @@ $connecter = isset($_SESSION['us_id']);
   
     if(isset($_POST['noter'])) {
       try{
-        echo "yolo";
         $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         $bdd->beginTransaction();
         $now = date("Y-m-d");
@@ -148,7 +147,7 @@ $connecter = isset($_SESSION['us_id']);
       }
     }
     if(isset($_POST['deinscritption'])){
-      echo "je me suis deinscrit";
+      echo "<h5>Vous êtes déinscrit</h5>";
       try{
         $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         $bdd->beginTransaction();

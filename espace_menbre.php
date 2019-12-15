@@ -63,8 +63,6 @@ if (isset($_POST['login-submit'])) {
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="main.php">Acceuil</a></li>
-        <li><a href="#">A propos</a></li>
-        <li><a href="#">Nous contacter</a></li>
         <?php 
           if(!empty($_SESSION['us_id'])){
             echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
@@ -95,9 +93,8 @@ if (isset($_POST['login-submit'])) {
     <div class="col-sm-6">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Gere mon compte</h4>
-        <p class="card-text">Changer de mot de passe</p>
-        <p class="card-text">Gere mes inscriptions</p>
+        <h4 class="card-title">Gérer mon compte</h4>
+        <p class="card-text"><a href = 'mes_inscription.php'>Gérer mes inscriptions</a></p>
       </div>
     </div>
   </div>
@@ -112,10 +109,10 @@ if (isset($_POST['login-submit'])) {
         echo '<div class="col-sm-6">';
         echo '<div class="card">';
         echo '<div class="card-body">';
-        echo '<h4 class="card-title">Gerer les Evenement</h4>';
-        echo '<p class="card-text"><a href="add_events.php">Ajouter un nouveau evenement</a></p>';
+        echo '<h4 class="card-title">Gérer les Evènement</h4>';
+        echo '<p class="card-text"><a href="add_events.php">Ajouter/Supprimer un nouveau évènement</a></p>';
           if ($_SESSION['us_role']=='administrator') {
-            echo '<p class="card-text"><a href = "add_lieu.php">Ajouter un nouveau lieu.</p> <p class="card-text"><a href="add_theme.php">Ajouter un nouveau thème</a></p>';
+            echo '<p class="card-text"><a href = "add_lieu.php">Ajouter/Supprimer un nouveau lieu.</p> <p class="card-text"><a href="add_theme.php">Ajouter un nouveau thème</a></p>';
           }
           
           // <a href="#" class="btn btn-primary">Go</a>

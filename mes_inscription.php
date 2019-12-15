@@ -1,35 +1,5 @@
 <?php 
 session_start();
-//echo $_SESSION['us_id'];
-if (isset($_POST['login-submit'])) {
-    //echo "popo";
-    $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
-    $user = $_POST['username'];
-    $mdp = $_POST['password'];
-
-    $connexion = $bdd->prepare("SELECT * FROM USER WHERE us_email = :user");
-    $connexion->bindParam(':user',$user);
-    
-    $connexion->execute();
-    $resultat = $connexion->fetch();
-    $isPasswordCorrect = password_verify($mdp, $resultat['us_password']);
-    if($isPasswordCorrect){
-        
-        $_SESSION['us_email'] = $user;
-        $_SESSION['us_id'] = $resultat['us_id']; 
-        $_SESSION['us_role'] = $resultat['us_role'];
-        $_SESSION['us_last_name'] = $resultat['us_last_name'];
-        $_SESSION['us_first_name'] = $resultat['us_first_name'];
-        //echo $_SESSION['us_id'];
-        //echo $_SESSION['us_email'];
-        //echo $_SESSION['us_role'];
-        
-    }else {
-        header ('Location: connexion.php');
-        exit();
-    }
-
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">

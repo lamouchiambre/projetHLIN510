@@ -1,6 +1,5 @@
 <?php 
 session_start();
-echo $_SESSION['us_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,9 +55,6 @@ echo $_SESSION['us_id'];
 </nav>
 
 <!-- Fin du menu -->
-<?php 
-  echo "<h1>bienvenue".$_SESSION['us_id']." </h1>"
-?>
 <div class = 'bloc'>
 <h1> Creer un evenement </h1>
 <form action="" method="post" enctype="multipart/form-data"> 
@@ -116,14 +112,57 @@ echo $_SESSION['us_id'];
       <label for="description">Saisir description</label>
       <textarea class="form-control" id="description" name ="description" rows="3"></textarea>
   </div>
-  <div class = "form">
+  <!-- <div class = "form">
     <label for="avatar">Mettre une image:</label>
       <input type="file"
         id="img" name="img"
         accept="image/png, image/jpeg">
-  </div>
+  </div> -->
+  <label for="url">Lien de l'image:</label>
+    <div class = "form">
+    <input type="url" name="url" id="url"
+          placeholder="https://example.com"
+          pattern="https://.*" 
+          required>
+          </div>
   <input type='submit' class='btn btn-primary' name='ajouter' value='ajouter'>
   
+</form>
+<h3>Liste des evenement</h3>
+<form action = 'add_events.php' method='post'>
+    <table >
+        <thead>
+        <tr>
+            <th></th>
+            <th>Nom</th>
+            <th>Date</th>
+            <th>Heure</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php 
+            $ev_all = $bdd->prepare("SELECT * FROM EVENTS");
+            $ev_all->execute(array($_SESSION['us_id']));
+            while($r = $ev_all->fetch()){
+                echo "<tr>";
+                echo "<td><input type='checkbox' name = events_id[] value =".$r['ev_id']."></td>";
+                echo "<td>".$r['ev_name']."</td>";
+                echo "<td>".$r['ev_date_start']."</td>";
+                echo "<td>".$r['ev_start_time']."</td>";
+                echo "</tr>";
+            }
+            if (!empty($_POST['supprimer'])){
+                $events = $_POST['events_id'];
+                for ($i=0; $i < count($events); $i++) { 
+                    $t = $bdd->prepare("DELETE FROM `events` WHERE ev_id = ?");
+                    $t->execute(array($events[$i]));
+                }
+                
+            }
+        ?>
+        </tbody>
+    </table>
+    <input type='submit' class='btn btn-primary' name='supprimer' value='supprimer'>
 </form>
 <?php 
     try{
@@ -131,17 +170,18 @@ echo $_SESSION['us_id'];
     } catch(Exception $e){
         die("Impossible de se connectée".$e->getMessage());
     }
-    if (!empty($_POST)){
+    if (!empty($_POST['ajouter'])){
         try{
-            $name = $_FILES['img']['name'];
+            //$name = $_FILES['img']['name'];
+            $name = $_POST['url'];
             if(!empty($name)){
-              echo $name;
+              
               //echo $_POST['img'];
-              $data = file_get_contents($_FILES['img']['tmp_name']);
-              $target = "img/events/".basename($name);
-              if (move_uploaded_file($_FILES['img']['tmp_name'], $target)){
-                echo "true";
-              }
+              //$data = file_get_contents($_FILES['img']['tmp_name']);
+              //$target = "img/events/".basename($name);
+              // if (move_uploaded_file($_FILES['img']['tmp_name'], $target)){
+              //   echo "true";
+              // }
             }
             
             $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
@@ -160,10 +200,10 @@ echo $_SESSION['us_id'];
             $p->bindParam(':img',$image);
             if (empty($name)) {
                 $image = "img/events/default.jpg";
-                echo "non";
+                //echo "non";
             }else{
-                $image = "img/events/".$name;
-                echo "oui";
+                $image = $_POST['url'];
+                //echo "oui";
             }
             $p->execute();
             $bdd->commit();
