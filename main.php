@@ -40,8 +40,6 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="main.php">Acceuil</a></li>
-        <li><a href="#">A propos</a></li>
-        <li><a href="#">Nous contacter</a></li>
         <?php 
           if ($connecter) {
             echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
