@@ -1,6 +1,5 @@
 <?php
-session_start();
-// echo $_SESSION['us_id'];
+	session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,7 +67,6 @@ session_start();
 	<h2>Lieux enregistrés</h2>
 	<div id="lieu_mapid"></div>
 		<script>
-
 			window.onload = function() {
 				var lieu_map = L.map('lieu_mapid').setView([43.6, 3.8833], 13);
 
@@ -80,7 +78,6 @@ session_start();
 					draggable: true
 					, opacity: 0.75
 				}).addTo(lieu_map);
-				// lieu_marker.valueOf()._icon.style.backgroundColor = 'purple';
 					
 				lieu_marker.on("mouseover", function(e) {
 					var gps = lieu_marker.getLatLng();
@@ -109,44 +106,52 @@ session_start();
 			<input type='textbox' name='name' id='name' placeholder='Nom'><br>
 			<input type='textbox' name='address' id='address' placeholder='Adresse'><br>
 			<input type='textbox' name='city' id='city' placeholder='Ville'><br><br>
+			<p class='text'>Aidez-vous du marqueur déplaçable transparent</p>
 			<input type='number' step='any' name='lat' id='lat' placeholder='Latitude'><br>
 			<input type='number' step='any' name='long' id='long' placeholder='Longitude'>
-			<p>(Aidez-vous du marqueur déplaçable)</p>
 		</div>
 		<input type='submit' class='btn btn-primary' name='ajouter' value='Ajouter'>
 	</form>
+</div>
 <!-- Fin formulaire -->
-<h2> Supprimer un lieu </h2>
-    <div class="custom-control custom-checkbox">
-    <form action = "" method="get">
-        <?php 
-            $lo = $bdd->prepare("SELECT * FROM LOCATIONS");
-            $lo->execute();
-            $nb = $lo->rowCount();
-            
-            while($r = $lo->fetch()){
-                echo "<div><input type='checkbox' name = lieu_id[] value =".$r['lo_id'].">";
-                echo "<label for=".$r['lo_id'].">".$r['lo_name']."</label></div>";
-            }
-        ?>
-    <input type='submit' class='btn btn-primary' name='supprimer' value='supprimer'>
-  </div>
-  </form>
-    <?php 
-        if(!empty($_GET['supprimer'])){
-            $lieu = $_GET['lieu_id'];
 
-          for ($i=0; $i < count($lieu); $i++) { 
-            $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            $bdd->beginTransaction();
-            $sup= $bdd->prepare("DELETE FROM `locations` WHERE lo_id = :lo_id ");
-            $sup->bindParam(":lo_id", $lieu[$i]);
-            $sup->execute();
-            $bdd->commit();
-            }
-        }
+<!-- Début suppression d'un lieu -->
+<div class='bloc'>
+	<h2>Supprimer un lieu</h2>
+		<div class="custom-control custom-checkbox">
+			
+			<form action = "" method="get">
+				<?php 
+					$lo = $bdd->prepare("SELECT * FROM LOCATIONS");
+					$lo->execute();
+					$nb = $lo->rowCount();
+					
+					while ($r = $lo->fetch()) {
+						echo "<div><input type='checkbox' name = lieu_id[] value =".$r['lo_id']."> ";
+						echo "<label for=".$r['lo_id'].">".$r['lo_name']."</label> ";
+						echo $r['lo_address'].'</div>';
+					}
+				?>
+		<input type='submit' class='btn btn-primary' name='supprimer' value='supprimer'>
+	</form>
+	<?php 
+		if (!empty($_GET['supprimer'])) {
+			$lieu = $_GET['lieu_id'];
+
+			for ($i=0; $i < count($lieu); $i++) { 
+				$bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+				$bdd->beginTransaction();
+				$sup= $bdd->prepare("DELETE FROM `locations` WHERE lo_id = :lo_id ");
+				$sup->bindParam(":lo_id", $lieu[$i]);
+				$sup->execute();
+				$bdd->commit();
+			}
+		}
 	?>
 	</div>
+</div>
+<!-- Fin suppression d'un lieu -->
+
 <!-- Début du submit -->
 <?php 
   try {
@@ -179,7 +184,7 @@ session_start();
 <!-- Début du footer -->
 <br>
 <footer class="container-fluid text-center" id="footer">
-	<p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
+	<p>&copy; 2019 Copyright: Alexandre Canton Condes, Ambre Lamouchi<p>
 </footer>
 <!-- Fin du Footer -->
 

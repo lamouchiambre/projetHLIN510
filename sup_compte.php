@@ -1,11 +1,11 @@
 <?php 
-session_start();
-$connecter = isset($_SESSION['us_id']);
+  session_start();
+  $connecter = isset($_SESSION['us_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Site événementiel d'Alexambre</title>
+  <title>Site événementiel d'Alex et Ambre</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -33,52 +33,48 @@ $connecter = isset($_SESSION['us_id']);
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="main.php">Acceuil</a></li>
-        <li><a href="#">A propos</a></li>
-        <li><a href="#">Nous contacter</a></li>
         <?php 
-          if($connecter){
+          if ($connecter) {
             echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
           }
         ?>
       </ul>
       <?php 
-
-        if(!$connecter){
+        if (!$connecter) {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
-        }else{
+        } else {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
         }
-        
       ?>
-
     </div>
   </div>
 </nav>
-
 <!-- Fin du menu -->
-<div class = 'bloc'>
-<h2> Supprimer des comptes </h2>
-<form action = 'sup_compte.php' method='get'>
-<table >
-    <thead>
-      <tr>
-        <th>Ajouter</th>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-        <th>Role</th>
-      </tr>
-    </thead>
-    <tbody>
-    <?php 
-        try{
+
+<!-- Début suppression de compte -->
+<div class='bloc' id='bloc_sup_compte'>
+  <h2>Supprimer un compte</h2><br>
+  <form action='sup_compte.php' method='get'>
+    <table>
+      <thead>
+        <tr>
+          <th>Ajouter</th>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php 
+          try {
             $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
-        } catch(Exception $e){
+          } catch(Exception $e) {
             die("Impossible de se connectée".$e->getMessage());
-        }
-        $user_all = $bdd->prepare("SELECT * FROM USER WHERE us_role <> 'administrator'");
-        $user_all->execute();
-        while($r = $user_all->fetch()){
+          }
+          $user_all = $bdd->prepare("SELECT * FROM USER WHERE us_role <> 'administrator'");
+          $user_all->execute();
+          while ($r = $user_all->fetch()) {
             echo "<tr>";
             echo "<td><input type='checkbox' name = user_id[] value =".$r['us_id']."></td>";
             echo "<td>".$r['us_first_name']."</td>";
@@ -86,32 +82,32 @@ $connecter = isset($_SESSION['us_id']);
             echo "<td>".$r['us_email']."</td>";
             echo "<td>".$r['us_role']."</td>";
             echo "</tr>";
-        }
-    ?>
-    </tbody>
-  </table>
-  <input type='submit' class='btn btn-primary' name='valider' value='valider'>
-</form>
+          }
+        ?>
+      </tbody>
+    </table>
+    <input type='submit' class='btn btn-primary' name='valider' value='valider'>
+  </form>
 <?php 
-    if (!empty($_GET['valider'])){
-        $user = $_GET['user_id'];
-        for ($i=0; $i < count($user); $i++) { 
-            $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-            $bdd->beginTransaction();
-            $t = $bdd->prepare("DELETE FROM USER WHERE us_id = ?");
-            $t->execute(array($user[$i]));
-            $t->execute();
-            $bdd->commit();
-        }
-        
-    }
-
+  if (!empty($_GET['valider'])) {
+    $user = $_GET['user_id'];
+    for ($i=0; $i < count($user); $i++) { 
+      $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+      $bdd->beginTransaction();
+      $t = $bdd->prepare("DELETE FROM USER WHERE us_id = ?");
+      $t->execute(array($user[$i]));
+      $t->execute();
+      $bdd->commit();
+    }    
+  }
 ?>
 </div>
+<!-- Fin suppression de compte -->
 
 <!-- Début du footer -->
+<br>
 <footer class="container-fluid text-center" id="footer">
-  <p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
+  <p>&copy; 2019 Copyright: Alexandre Canton Condes, Ambre Lamouchi<p>
 </footer>
 <!-- Fin du Footer -->
 

@@ -66,13 +66,14 @@
 	$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
 	$req = "SELECT ev_id, ev_lo_id, ev_th_id, ev_name, ev_price, 
 		lo_id, lo_name, lo_address, lo_city, lo_gps_lat, lo_gps_long,
+		th_id, th_name,
 		DATE_FORMAT(ev_date_start, '%Y-%m-%d') AS date_debut, 
 		DATE_FORMAT(ev_date_end, '%Y-%m-%d') AS date_fin, 
 		DAY(ev_date_start) as jour_debut, MONTH(ev_date_start) as mois_debut, YEAR(ev_date_start) annee_debut, 
 		DAY(ev_date_end) as jour_fin, MONTH(ev_date_end) as mois_fin, YEAR(ev_date_end) annee_fin, 
 		ev_picture, DATE_FORMAT(ev_date_start, '%w' ) as numJourDebut, 
 		DATE_FORMAT(ev_date_end, '%w' ) as numJourFin 
-		FROM Events, Locations WHERE ev_lo_id = lo_id";
+		FROM Events, Locations, Theme WHERE ev_lo_id = lo_id AND ev_th_id = th_id" ;
 
 	$event = $bdd->prepare($req);
 	$event->execute();
@@ -183,7 +184,10 @@
 				$var_lo_id = 0;
 				while ($r = $lieu->fetch()) {
 					$var_lo_id = $var_lo_id + 1;
-					$map_req = "SELECT * FROM Events, Locations WHERE ev_lo_id = lo_id AND lo_id = :var_lo_id";
+					$map_req = "SELECT *
+					, DATE_FORMAT(ev_date_end, '%d-%m-%Y') AS date_fin 
+					, DATE_FORMAT(ev_date_start, '%d-%m-%Y') AS date_debut 
+					FROM Events, Locations, Theme WHERE ev_lo_id = lo_id AND ev_th_id = th_id AND lo_id = :var_lo_id";
 					echo "L.marker([".$r['lo_gps_lat'].",".$r['lo_gps_long']."]";
 
 					// Redéfinition de la liste des événements selon ce qu'on a recherché
@@ -192,13 +196,13 @@
 						// Modification de la requête
 						if ($th_id != 0 or $lo_id != 0 or $date) {
 							$map_req = $map_req." AND ";
-						} 
+						}
 						if ($th_id != 0) {
 							$map_req = $map_req."ev_th_id = :th_id";
 						}
 						if ($th_id != 0 and $lo_id != 0) {
 							$map_req = $map_req." AND ";
-						} 
+						}
 						if ($lo_id != 0) {
 							$map_req = $map_req."ev_lo_id = :lo_id";
 						}
@@ -236,13 +240,13 @@
 						echo ", {opacity: 0.5}";
 						echo ").addTo(mymap).bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address'];
 					} else {
-						echo ").addTo(mymap).bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<br>---";
+						echo ").addTo(mymap).bindPopup('<b>".$r['lo_name']."</b><br>".$r['lo_address']."<p>";
 					}
 
 					while ($e = $map_event->fetch()) {
-						echo "<br>".$e['ev_id'].' '.$e['ev_th_id'].' '.$e['ev_lo_id'].' '.$e['ev_name'].' '.$e['ev_price'].'€';
+						echo "<br><b>".$e['ev_name'].'</b>  '.'  de '.$e['date_fin'].' à '.$e['date_debut'].'  <b>'.$e['ev_price'].'</b>€';
 					}
-					echo "');";
+					echo "</p>');";
 				}
 			?>
 		}
@@ -255,15 +259,15 @@
 <div class="bloc" id="bloc-list-events">
 	<?php 
 		echo '<table>';
-		echo '<tr> <th>Affiche</th> <td>ev_th_id</td> <td>ev_lo_id</td> <td>Titre</td> <td>Début</td> <td>Fin</td> <td>Prix</td> </tr>';
+		echo '<tr> <th>Affiche</th> <th>Thème</th> <th>Lieu</th> <th>Titre</th> <th>Début</th> <th>Fin</th> <th>Prix</th> <th>Voir</th> </tr>';
 		while($res = $event->fetch()) {
 			echo '<tr>';
 			echo '<th> <img align="middle" src="'.$res['ev_picture'].'" width=200px height=100px></th>';
-			echo '<td>'.$res['ev_th_id'].'</td>';
-			echo '<td>'.$res['ev_lo_id'].'</td>';
+			echo '<td>'.$res['th_name'].'</td>';
+			echo '<td>'.$res['lo_name'].'</td>';
 			echo '<td>'.$res['ev_name'].'</td>';
-			echo '<td>'.$res['date_debut']."<br>".$jour[$res['numJourDebut']].' '.$res['jour_debut'].' '.$mois[$res['mois_debut'] - 1].' '.$res['annee_debut'].' </td>';
-			echo '<td>'.$res['date_fin']."<br>".$jour[$res['numJourFin']].' '.$res['jour_fin'].' '.$mois[$res['mois_fin'] - 1].' '.$res['annee_fin'].' </td>';
+			echo '<td>'.$jour[$res['numJourDebut']].' '.$res['jour_debut'].' '.$mois[$res['mois_debut'] - 1].' '.$res['annee_debut'].' </td>';
+			echo '<td>'.$jour[$res['numJourFin']].' '.$res['jour_fin'].' '.$mois[$res['mois_fin'] - 1].' '.$res['annee_fin'].' </td>';
 
 			if ($res['ev_price'] == 0) {
 				echo '<td > GRATUIT </td>';
@@ -272,7 +276,7 @@
 			}
 			echo "<td>  <form action='evenement.php' method='get'>
 				<input type='hidden' name='id' value=".$res['ev_id']. ">
-				<input type='submit' class='btn btn-primary' name='voir' value='". $res['ev_id']. "'> </td>";
+				<input type='submit' class='btn btn-primary' name='voir' value='".$res['ev_id']."'> </td>";
 			echo '</tr>';
 			echo '</thead>';
 		}
@@ -284,7 +288,7 @@
 <!-- Début du footer -->
 <br>
 <footer class="container-fluid text-center" id="footer">
-	<p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
+	<p>&copy; 2019 Copyright: Alexandre Canton Condes, Ambre Lamouchi<p>
 </footer>
 <!-- Fin du Footer -->
 

@@ -8,10 +8,6 @@ body {
   background-size: cover;
   display : table;
   width: 100%;
-
-  /* background: #ffd89b;
-  background: -webkit-linear-gradient(to right, #ffd89b, #19547b);
-  background: linear-gradient(to right, #ffd89b, #19547b); */
 }
 .navbar {
   margin-bottom: 0;
@@ -24,9 +20,7 @@ body {
   color: white;
 }
 ul.nav a:hover {
-  /* background-color: rgba(150, 0, 75, 1);   */
   background-color: DimGrey !important;  
-  /* color: Plum !important; */
   color: Gold !important;
 }
 .logo {
@@ -50,9 +44,8 @@ ul.nav a:hover {
 footer {
   background-color: rgba(0, 0, 0, 0.70);
   padding: 25px;
-  color: white;
-    display : table-row;
-    height: 1px;
+  display : table-row;
+  height: 1px;
 }
 input {
   color: rgba(0, 0, 0, 1);
@@ -80,6 +73,12 @@ input {
   grid-template-columns: repeat(3, 2fr);
   grid-gap: 10px;
 }
+.wrapper_map {
+  display: grid;
+  grid-template-columns: repeat(4, 2fr);
+  grid-gap: 5px;
+}
+
 .search-bar-category {
   grid-row: 1;
 }
@@ -104,15 +103,128 @@ input {
 #mapid, #lieu_mapid { 
   height: 480px; 
 }
+
+/* Tableau */
 th {
   text-align: center;
 }
 td {
   padding: 5px;
-  margin: 5px;
+}
+td, th {
+  border-bottom: 3px solid rgba(150, 0, 75, 0.5);
+  text-align: center;
+}
+td {
+  text-align: left;
+}
+tr:hover {
+  background-color: rgba(75, 19, 48, 0.5);
+  transition: 0.4s;
+  color: gold;
+}
+td:hover, th:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: 0.4s;
 }
 
-/*table {
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 5px;
-}*/
+.table_map {
+  text-align: center;
+}
+p {
+  color: rgba(150, 0, 75, 1);
+}
+a:hover {
+  color: gold;
+  transition: 0.4s;
+}
+img:hover {
+  transform: scale(1.5);
+  transition: 0.4s;
+}
+
+.btn {
+  margin: 15px;
+}
+.btn:hover {
+  color: gold;
+  transition: 0.4s;
+  background-color: gray;
+}
+
+h1, h2, h3 {
+  color: gold;
+}
+
+.bloc_add_events {
+  padding-left: 250px;
+  padding-right: 250px;
+}
+.text {
+  color: white;
+}
+label:hover {
+  color: rgba(150, 0, 75, 1);
+  transition: 0.4s;
+}
+.table_lieu, table, td, th {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#a1 {
+  padding: 50px;
+  position: relative;
+  animation-name: a1;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes a1 {
+  0%   {left:0px;}
+  25%  {left:100px;}
+  50%  {left:0px;}
+  75%  {left:-100px;}
+  100% {left:0px;}
+}
+#a1:hover {
+  
+  transition: 0.4s;
+
+  animation-name: a1_2;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  
+}
+@keyframes a1_2 {
+  0%   {
+    transform: scale(0.5); 
+    color: white;
+  }
+  25%  {
+    transform: scale(1.0); 
+    color: rgba(150, 0, 75, 1);
+  }
+  50%  {
+    transform: scale(1.5); 
+    color: gold;
+  }
+  75%  {
+    transform: scale(1.0); 
+    color: rgba(150, 0, 75, 1);
+  }
+  100% {
+    transform: scale(0.5); 
+    color: white;
+  }
+}
+
+#bloc_contrib1, #bloc_contrib2 {
+  padding-left: 175px;
+  padding-right: 175px;
+}
+#bloc_sup_compte {
+  padding-left: 150px;
+  padding-right: 150px;
+}

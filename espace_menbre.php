@@ -1,40 +1,37 @@
+<!-- Début configation de la session -->
 <?php 
-session_start();
-//echo $_SESSION['us_id'];
-if (isset($_POST['login-submit'])) {
-    //echo "popo";
+  session_start();
+
+  if (isset($_POST['login-submit'])) {
     $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
     $user = $_POST['username'];
     $mdp = $_POST['password'];
 
     $connexion = $bdd->prepare("SELECT * FROM USER WHERE us_email = :user");
     $connexion->bindParam(':user',$user);
-    
+      
     $connexion->execute();
     $resultat = $connexion->fetch();
     $isPasswordCorrect = password_verify($mdp, $resultat['us_password']);
-    if($isPasswordCorrect){
-        
-        $_SESSION['us_email'] = $user;
-        $_SESSION['us_id'] = $resultat['us_id']; 
-        $_SESSION['us_role'] = $resultat['us_role'];
-        $_SESSION['us_last_name'] = $resultat['us_last_name'];
-        $_SESSION['us_first_name'] = $resultat['us_first_name'];
-        //echo $_SESSION['us_id'];
-        //echo $_SESSION['us_email'];
-        //echo $_SESSION['us_role'];
-        
-    }else {
-        header ('Location: connexion.php');
-        exit();
-    }
 
-}
+    if ($isPasswordCorrect) {
+      $_SESSION['us_email'] = $user;
+      $_SESSION['us_id'] = $resultat['us_id']; 
+      $_SESSION['us_role'] = $resultat['us_role'];
+      $_SESSION['us_last_name'] = $resultat['us_last_name'];
+      $_SESSION['us_first_name'] = $resultat['us_first_name'];
+    } else {
+      header('Location: connexion.php');
+      exit();
+    }
+  }
 ?>
+<!-- Fin configation de la session -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Site événementiel d'Alexambre</title>
+  <title>Site événementiel d'Alex et Ambre</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -49,7 +46,6 @@ if (isset($_POST['login-submit'])) {
 <body>
 
 <!-- Début du menu -->
-
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -64,77 +60,78 @@ if (isset($_POST['login-submit'])) {
       <ul class="nav navbar-nav">
         <li class="active"><a href="main.php">Acceuil</a></li>
         <?php 
-          if(!empty($_SESSION['us_id'])){
+          if (!empty($_SESSION['us_id'])) {
             echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
           }
         ?>
       </ul>
       <?php 
-
-        if(empty($_SESSION['us_id'])){
+        if (empty($_SESSION['us_id'])) {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> </ul>';
-        }else{
+        } else {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Deconnection</a></li> </ul>';
         }
-        
       ?>
-
     </div>
   </div>
 </nav>
-
 <!-- Fin du menu -->
+
+<!-- Début de l'espace perso -->
 <div class = 'bloc'>
 <?php 
-  echo "<h1>Bienvenue ".$_SESSION['us_first_name'].' '.$_SESSION['us_last_name']." </h1>"
+  echo "<h1>Bienvenue ";
+  if ($_SESSION['us_role'] == 'administrator') {
+    echo "administrateur ";
+  } else if ($_SESSION['us_role'] == 'contributor') {
+    echo "contributeur ";
+  }
+  echo $_SESSION['us_first_name'].' '.$_SESSION['us_last_name']." </h1>"
 ?>
-    <h4> Que voulez vous faire aujourd'hui ?</h4>
+<br>
+<h4 id='a1'>Que voulez vous faire aujourd'hui ?</h4>
+<br>
 <div class="row">
-    <div class="col-sm-6">
+  <div class="col-sm-6">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Gérer mon compte</h4>
-        <p class="card-text"><a href = 'mes_inscription.php'>Gérer mes inscriptions</a></p>
+        <h4 class="card-title">Gêrer mon compte</h4>
+        <p class="card-text"><a href = 'mes_inscription.php'>Gêrer mes inscriptions</a></p>
       </div>
     </div>
   </div>
-      <?php 
+    <?php 
       if ($_SESSION['us_role'] != 'visitor') {
-        if ($_SESSION['us_role']=='administrator') {
+        if ($_SESSION['us_role'] =='administrator') {
           echo '<div class="col-sm-6"> <div class="card text-white bg-dark mb-3">
-            <div class="card-body"> <h4 class="card-title">Gerer les Compte</h4>            <p class="card-text"><a href="add_contributeur.php">Ajouter/Supprimer les contribueurs</a></p>            <p class="card-text"><a href = "sup_compte.php"> Supprimer les comptes</a></p>                      </div>        </div>      </div>';
+            <div class="card-body"> <h4 class="card-title">Gêrer les comptes</h4>            <p class="card-text"><a href="add_contributeur.php">Ajouter/Supprimer un contributeur</a></p>            <p class="card-text"><a href = "sup_compte.php"> Supprimer les comptes</a></p>                      </div>        </div>      </div>';
         }
-      
       
         echo '<div class="col-sm-6">';
         echo '<div class="card">';
         echo '<div class="card-body">';
-        echo '<h4 class="card-title">Gérer les Evènement</h4>';
-        echo '<p class="card-text"><a href="add_events.php">Ajouter/Supprimer un nouveau évènement</a></p>';
-          if ($_SESSION['us_role']=='administrator') {
-            echo '<p class="card-text"><a href = "add_lieu.php">Ajouter/Supprimer un nouveau lieu.</p> <p class="card-text"><a href="add_theme.php">Ajouter un nouveau thème</a></p>';
-          }
-          
-          // <a href="#" class="btn btn-primary">Go</a>
+        echo '<h4 class="card-title">Gêrer les événements</h4>';
+        echo '<p class="card-text"><a href="add_events.php">Ajouter/Supprimer un nouveau événement</a></p>';
+        if ($_SESSION['us_role']=='administrator') {
+          echo '<p class="card-text"><a href = "add_lieu.php">Ajouter/Supprimer un nouveau lieu</p> <p class="card-text"><a href="add_theme.php">Ajouter un nouveau thème</a></p>';
+        }
         echo '</div></div></div>';
       }
-      ?>
-  
-</div>
-
-<?php 
-    try{
-        $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+    ?>
+  </div>
+  <?php 
+    try {
+      $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
     } catch(Exception $e){
-        die("Impossible de se connectée".$e->getMessage());
+      die("Impossible de se connectée".$e->getMessage());
     }
-
-?>
+  ?>
 </div>
+<!-- Fin de l'espace perso -->
 
 <!-- Début du footer -->
 <footer class="container-fluid text-center" id="footer">
-  <p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
+  <p>&copy; 2019 Copyright: Alexandre Canton Condes, Ambre Lamouchi<p>
 </footer>
 <!-- Fin du Footer -->
 
