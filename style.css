@@ -228,3 +228,15 @@ label:hover {
   padding-left: 150px;
   padding-right: 150px;
 }
+#bloc_event p {
+  color: white;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+#bloc_event h1 {
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.70);
+}
+#img_event {
+  margin: 10px;
+  width: 700px;
+}

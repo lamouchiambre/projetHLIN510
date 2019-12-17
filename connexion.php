@@ -67,7 +67,7 @@
 	<?php 
 		try {
 			$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-			//$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+			// $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
 		} catch(PDOException $e) {
 			echo $e->getMessage();
 			die("Connexion impossible");
@@ -92,10 +92,10 @@
 						<div class="col-lg-12">
 							<form id="login-form" action="espace_menbre.php" method="post" role="form" style="display: block;">
 								<div class="form-group">
-									<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+									<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Email" value="">
 								</div>
 								<div class="form-group">
-									<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+									<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Mot de passe">
 								</div>
 								<div class="form-group">
 									<div class="row">

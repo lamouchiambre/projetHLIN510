@@ -4,7 +4,7 @@
 
   if (isset($_POST['login-submit'])) {
     $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-    //$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+    // $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
     $user = $_POST['username'];
     $mdp = $_POST['password'];
 

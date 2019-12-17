@@ -51,69 +51,68 @@
 </nav>
 <!-- Fin du menu -->
 
-<div class = 'bloc'>
-<?php 
-  if($_GET['voir']){
-    $name = $_GET['voir'];
-  }
-    $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-    //$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+<!-- Début de la présentation de l'événement -->
+<div class='bloc' id='bloc_event'>
+  <?php 
+    if ($_GET['voir']) {
+      $name = $_GET['voir'];
+    }
+      $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+      // $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
 
-    $register = $bdd->prepare("SELECT * FROM REGISTER WHERE re_us_id = :us_id AND re_ev_id = :ev_id");
-    $register->bindParam(':us_id', $_SESSION['us_id']);
-    $register->bindParam(':ev_id', $name);
-    $register->execute();
+      $register = $bdd->prepare("SELECT * FROM REGISTER WHERE re_us_id = :us_id AND re_ev_id = :ev_id");
+      $register->bindParam(':us_id', $_SESSION['us_id']);
+      $register->bindParam(':ev_id', $name);
+      $register->execute();
 
-    $rate = $bdd->prepare("SELECT * FROM `rate` WHERE `ra_us_id` = ? AND `ra_ev_id` = ?");
-    $rate->execute(array($_SESSION['us_id'], $name));
-    $deja_rate = $rate->rowCount();
-    $event = $bdd->prepare("SELECT * FROM EVENTS WHERE ev_id = ?");
-    $event->execute(array($name));
-    
-    $passer = false;
-    while($resulat = $event->fetch()){
-      if($resulat['ev_date_end']<=date("Y-m-d")){
-        $passer = true;
-      }
+      $rate = $bdd->prepare("SELECT * FROM `rate` WHERE `ra_us_id` = ? AND `ra_ev_id` = ?");
+      $rate->execute(array($_SESSION['us_id'], $name));
+      $deja_rate = $rate->rowCount();
+      $event = $bdd->prepare("SELECT * FROM EVENTS WHERE ev_id = ?");
+      $event->execute(array($name));
+      
+      $passer = false;
+      while ($resulat = $event->fetch()) {
+        if ($resulat['ev_date_end']<=date("Y-m-d")) {
+          $passer = true;
+        }
         echo  "<h1>".$resulat['ev_name']."</h1>";
-        echo "<img src=".$resulat['ev_picture']." class='img-fluid' width = 790px>";
+        echo "<img id='img_event' src=".$resulat['ev_picture']." class='img-fluid'>";
         echo $resulat['ev_descriptive'];
-    }
-    $avg_rate = $bdd->prepare('SELECT AVG(ra_rating) AS moyenne FROM `rate` WHERE `ra_ev_id`= ?');
-    $avg_rate->execute(array($name));
-    echo "</br>";
-    if (!$rate) {
-      while($resulat = $avg_rate->fetch()){
-        echo "<h4>La note moyenne de l'évènement est : ".$resulat['moyenne']."/10 </h4></br>";
       }
-    }
 
+      $avg_rate = $bdd->prepare('SELECT AVG(ra_rating) AS moyenne FROM `rate` WHERE `ra_ev_id`= ?');
+      $avg_rate->execute(array($name));
+      echo "</br>";
+      if (!$rate) {
+        while ($resulat = $avg_rate->fetch()) {
+          echo "<h4>La note moyenne de l'évènement est : ".$resulat['moyenne']."/10 </h4></br>";
+        }
+      }
 
-    if($connecter){
-        if(!$passer){
-          if ( $register->rowCount()!=0) {
+      if ($connecter) {
+        if (!$passer) {
+          if ($register->rowCount()!=0) {
             echo "<form action='' method='post'>
             <input type='hidden' name='id' value=".$name. ">
             <input type='submit' class='btn btn-primary' name='deinscritption' value='deinscription'>";
-          }else {
+          } else {
             echo "<form action='' method='post'>
             <input type='hidden' name='id' value=".$name. ">
             <input type='submit' class='btn btn-primary' name='inscritption' value='inscription' onclick=alert('Vous êtes inscrit');>";
           }
-        }else{
+        } else {
           if ($deja_rate==1) {
             echo "<form action='' method='post'>";
             echo"<h3>L'evenement est passer vous pouvait noter l'evenemnt</h3>";
-            echo '<div class="form"><label>Noter levenement</label><input type="number" name="note" min="0" max="10"></div>';
-            //echo'<div class="form"><label for="commentaire">Saisir commentaire</label> <textarea class="form-control" name ="commentaire" rows="3"></textarea></div>';
-            //echo "<input type='submit' class='btn btn-primary' name='noter' value='noter'>"; 
+            echo '<div class="form"><label>Noter l\'événement</label><input type="number" name="note" min="0" max="10"></div>';
             echo "</form>";
           }
         }
       }
-    if(isset($_POST['inscritption'])){
+    if (isset($_POST['inscritption'])) {
       echo "<h5>Vous êtes inscrit</h5>";
-      try{
+      try {
         $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         $bdd->beginTransaction();
         $ins = $bdd->prepare("INSERT INTO `register`(`re_registration_date`, `re_us_id`, `re_ev_id`) VALUES (:dateI, :us_id, :ev_id)");
@@ -124,27 +123,26 @@
         $ins->bindParam(':ev_id', $name);
         $ins->execute();
         $bdd->commit();
-      }catch(PDOException $e)
-      {
-      echo "<br>" . $e->getMessage();
+      } catch(PDOException $e) {
+        echo "<br>" . $e->getMessage();
       }
     }
-  
-    if(isset($_POST['noter'])) {
-      try{
+    
+    if (isset($_POST['noter'])) {
+      try {
         $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         $bdd->beginTransaction();
         $now = date("Y-m-d");
         $note = $bdd->prepare("INSERT INTO `rate`(`ra_date`, `ra_rating`, `ra_us_id`, `ra_ev_id`) VALUES (?,?,?,?)");
         $note->execute(array($now,$_POST['note'], $_SESSION['us_id'], $name));
         $bdd->commit();
-      }catch(PDOException $e){
+      } catch(PDOException $e) {
         echo "<br>" . $e->getMessage();
       }
     }
-    if(isset($_POST['deinscritption'])){
-      echo "<h5>Vous êtes déinscrit</h5>";
-      try{
+    if (isset($_POST['deinscritption'])) {
+      echo "<h5>Vous êtes désinscrit</h5>";
+      try {
         $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         $bdd->beginTransaction();
         $dins = $bdd->prepare("DELETE FROM `register` WHERE re_us_id = :us_id AND re_ev_id = :ev_id");
@@ -152,17 +150,18 @@
         $dins->bindParam(':us_id', $_SESSION['us_id']);
         $dins->bindParam(':ev_id', $name);
         $dins->execute();
-      }catch(PDOException $e)
-      {
-      echo "<br>" . $e->getMessage();
+      } catch(PDOException $e) {
+        echo "<br>" . $e->getMessage();
       }
-  }
-?>
+    }
+  ?>
 </div>
+<!-- Fin de la présentation de l'événement -->
 
 <!-- Début du footer -->
+<br>
 <footer class="container-fluid text-center" id="footer">
-  <p>&copy; 2019 Copyright: A. Canton Condes, A. Lamouchi<p>
+  <p>&copy; 2019 Copyright: Alexandre Canton Condes, Ambre Lamouchi<p>
 </footer>
 <!-- Fin du Footer -->
 

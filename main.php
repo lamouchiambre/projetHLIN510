@@ -63,7 +63,7 @@
 	$mois = ["janvier","février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 	$jour = ["dimanche","lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
 	$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-	//$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+	// $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
 	$req = "SELECT ev_id, ev_lo_id, ev_th_id, ev_name, ev_price, 
 		lo_id, lo_name, lo_address, lo_city, lo_gps_lat, lo_gps_long,
 		th_id, th_name,
