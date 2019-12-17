@@ -1,11 +1,11 @@
 <?php 
-session_start();
-$connecter = isset($_SESSION['us_id']);
+  session_start();
+  $connecter = isset($_SESSION['us_id']);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <title>Site événementiel d'Alexambre</title>
+  <title>Site événementiel d'Alex et Ambre</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -34,32 +34,30 @@ $connecter = isset($_SESSION['us_id']);
       <ul class="nav navbar-nav">
         <li class="active"><a href="main.php">Acceuil</a></li>
         <?php 
-          if($connecter){
+          if ($connecter) {
             echo '<li><a href="espace_menbre.php">Mon espace</a></li>';
           }
         ?>
       </ul>
       <?php 
-
-        if(!$connecter){
+        if (!$connecter) {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="connexion.php"><span class="glyphicon glyphicon-log-in"></span> Se connecter</a></li> </ul>';
-        }else{
+        } else {
           echo '<ul class="nav navbar-nav navbar-right"> <li><a href="deconnection.php"><span class="glyphicon glyphicon-log-in"></span> Se déconnecter</a></li> </ul>';
         }
-        
       ?>
-
     </div>
   </div>
 </nav>
 <!-- Fin du menu -->
+
 <div class = 'bloc'>
 <?php 
   if($_GET['voir']){
     $name = $_GET['voir'];
-    //echo $name;
   }
-    $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+    $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+    //$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
 
     $register = $bdd->prepare("SELECT * FROM REGISTER WHERE re_us_id = :us_id AND re_ev_id = :ev_id");
     $register->bindParam(':us_id', $_SESSION['us_id']);

@@ -58,8 +58,8 @@
 <!-- Fin du menu -->
 
 <?php
-	// $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-	$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+	$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+	//$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
 ?>
 
 <!-- Début de la map -->
@@ -155,8 +155,8 @@
 <!-- Début du submit -->
 <?php 
   try {
-		// $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-    $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+		$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+    //$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
   } catch(Exception $e) {
   	die("Impossible de se connectée".$e->getMessage());
 	}

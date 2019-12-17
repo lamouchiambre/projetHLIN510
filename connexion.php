@@ -66,9 +66,8 @@
 <div class="container">
 	<?php 
 		try {
-			//echo $_POST['login-submit'];
-			//$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-			$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+			$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+			//$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
 		} catch(PDOException $e) {
 			echo $e->getMessage();
 			die("Connexion impossible");
@@ -132,7 +131,6 @@
 							</form>
 							<?php 
 								if (isset($_POST['register-submit'])) {
-									echo "oui";
 									if ($_POST['password'] == $_POST['confirm-password']) {
 										$pass_hache = password_hash($_POST['password'], PASSWORD_DEFAULT);
 										$_POST['email'];

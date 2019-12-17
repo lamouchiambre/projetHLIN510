@@ -63,8 +63,8 @@
       <label for="theme">Thème :</label>
       <select class="form-control" name = "theme" id="theme" placeholder="Thème">
         <?php 
-          //$bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
-          $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+          $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+          //$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
           $theme = $bdd->prepare("SELECT * FROM THEME");
           $theme->execute();
           while ($resulat = $theme->fetch()) {
@@ -173,7 +173,8 @@
 </form>
 <?php 
   try {
-    $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+    $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+    //$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
   } catch(Exception $e) {
     die("Impossible de se connectée".$e->getMessage());
   }

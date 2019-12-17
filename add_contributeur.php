@@ -67,7 +67,8 @@
       </thead>
       <tbody>
         <?php 
-          $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+          $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+          //$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
           $user_all = $bdd->prepare("SELECT * FROM USER WHERE us_role = 'visitor'");
           $user_all->execute();
           while ($r = $user_all->fetch()) {
@@ -122,7 +123,8 @@
 </div>
 <?php 
   try {
-    $bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
+    $bdd = new PDO('mysql:host=mysql.etu.umontpellier.fr;dbname=e20160018322;charset=utf8', 'e20160018322','260293');
+    //$bdd = new PDO('mysql:host=localhost;dbname=e20160018322;charset=utf8', 'root','');
   } catch(Exception $e) {
     die("Impossible de se connectée".$e->getMessage());
   }
