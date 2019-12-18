@@ -173,7 +173,7 @@ label:hover {
 }
 
 #a1 {
-  padding: 50px;
+  padding: 25px;
   position: relative;
   animation-name: a1;
   animation-duration: 4s;
@@ -182,9 +182,9 @@ label:hover {
 }
 @keyframes a1 {
   0%   {left:0px;}
-  25%  {left:100px;}
+  25%  {left:80px;}
   50%  {left:0px;}
-  75%  {left:-100px;}
+  75%  {left:-80px;}
   100% {left:0px;}
 }
 #a1:hover {

@@ -244,7 +244,7 @@
 					}
 
 					while ($e = $map_event->fetch()) {
-						echo "<br><b>".$e['ev_name'].'</b>  '.'  de '.$e['date_fin'].' à '.$e['date_debut'].'  <b>'.$e['ev_price'].'</b>€';
+						echo "<br><b>".$e['ev_name'].'</b>  '.'  de '.$e['date_fin'].' à '.$e['date_debut'].'  <b>'.$e['ev_price'].'€</b>';
 					}
 					echo "</p>');";
 				}

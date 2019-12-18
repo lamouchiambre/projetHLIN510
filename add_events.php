@@ -114,8 +114,7 @@
     <div class = "form">
       <input type="url" name="url" id="url"
         placeholder="https://example.com"
-        pattern="https://.*" 
-        required>
+        pattern="https://.*">
     </div>
   <input type='submit' class='btn btn-primary' name='ajouter' value='ajouter'>
 </form>
