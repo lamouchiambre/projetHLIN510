@@ -91,6 +91,14 @@
       <input type="number" name="prix" id="prix" step="1" value="0" min="0">
     </div>
     <div class="form">
+      <label for ="nb_min">Nombre minimum de place :</label> 
+      <input type="number" name="nb_min" id="nb_min" step="1"  min="0">
+    </div>
+    <div class="form">
+      <label for ="nb max">Nombre maximal de place :</label> 
+      <input type="number" name="nb_max" id="nb_max" step="1"  min="0">
+    </div>
+    <div class="form">
       <label for="date_deb">Date de début :</label>
       <input type="date" name="date_deb" id="date_deb">
     </div>
@@ -182,7 +190,7 @@
       $name = $_POST['url'];
       $bdd->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
       $bdd->beginTransaction();
-      $p = $bdd->prepare("INSERT INTO `events` (`ev_id`, `ev_lo_id`, `ev_th_id`, `ev_name`, `ev_price`, `ev_date_start`, `ev_date_end`, `ev_start_time`, `ev_end_time`, `ev_nb_people_min`, `ev_nb_people_max`, `ev_descriptive`, `ev_average`, `ev_picture`) VALUES (NULL, :theme, :lieu, :nom, :prix, :date_deb, :date_fin, :heur_deb, :heur_fin, NULL, NULL,:descr,NULL, :img)");
+      $p = $bdd->prepare("INSERT INTO `events` (`ev_id`, `ev_lo_id`, `ev_th_id`, `ev_name`, `ev_price`, `ev_date_start`, `ev_date_end`, `ev_start_time`, `ev_end_time`, `ev_nb_people_min`, `ev_nb_people_max`, `ev_descriptive`, `ev_average`, `ev_picture`) VALUES (NULL, :theme, :lieu, :nom, :prix, :date_deb, :date_fin, :heur_deb, :heur_fin, :nb_min, :nb_max,:descr,NULL, :img)");
       $p->bindParam(':theme', $_POST['theme']);
       $p->bindParam(':lieu', $_POST['lieu']);
       $p->bindParam(':nom', $_POST['nom']);
@@ -198,6 +206,18 @@
       } else {
         $image = $_POST['url'];
       }
+	if(empty($_POST['nb_min'])){
+	$nb_min = NULL;
+	}else{
+	$nb_min = $_POST['nb_min'];
+	}
+	$p->bindParam(':nb_min',$nb_min);
+	if(empty($_POST['nb_max'])){
+		$nb_max = NULL;
+	}else{
+		$nb_max = $_POST['nb_max'];
+	}
+	$p->bindParam(':nb_max',$nb_max);
       $p->execute();
       $bdd->commit();
     } catch(Exception $e) {
