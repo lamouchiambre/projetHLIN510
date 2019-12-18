@@ -86,9 +86,11 @@
       $avg_rate = $bdd->prepare('SELECT AVG(ra_rating) AS moyenne FROM `rate` WHERE `ra_ev_id`= ?');
       $avg_rate->execute(array($name));
       echo "</br>";
-      // if (!$rate) {
-        
-      // }
+      if (!$rate) {
+        while ($resulat = $avg_rate->fetch()) {
+          echo "<h4>La note moyenne de l'évènement est : ".$resulat['moyenne']."/10 </h4></br>";
+        }
+      }
 
       if ($connecter) {
         if (!$passer) {
@@ -99,17 +101,14 @@
           } else {
             echo "<form action='' method='post'>
             <input type='hidden' name='id' value=".$name. ">
-            <input type='submit' class='btn btn-primary' name='inscritption' value='inscription'>";
+            <input type='submit' class='btn btn-primary' name='inscritption' value='inscription' onclick=alert('Vous êtes inscrit');>";
           }
         } else {
-          while ($resulat = $avg_rate->fetch()) {
-          echo "<h4>La note moyenne de l'évènement est : ".$resulat['moyenne']."/10 </h4></br>";
-        }
-          if ($deja_rate==0) {
+          if ($deja_rate==1) {
             echo "<form action='' method='post'>";
-            echo"<h3>L'évènement est passé vous pouvez noter l'évènement </h3>";
+            echo"<h3>L'evenement est passer vous pouvait noter l'evenemnt</h3>";
             echo '<div class="form"><label>Noter l\'événement</label><input type="number" name="note" min="0" max="10"></div>';
-            echo " <input type='submit' class='btn btn-primary' name='noter' value='noter'></form>";
+            echo "</form>";
           }
         }
       }
