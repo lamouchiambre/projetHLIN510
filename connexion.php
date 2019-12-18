@@ -113,13 +113,13 @@
 									<input type="text" name="nom" id="nom" tabindex="1" class="form-control" placeholder="Nom" value="">
 								</div>
 								<div class="form-group">
-									<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+									<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="">
 								</div>
 								<div class="form-group">
-									<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+									<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Mot de passe">
 								</div>
 								<div class="form-group">
-									<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+									<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirmer mot de passe">
 								</div>
 								<div class="form-group">
 									<div class="row">

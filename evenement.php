@@ -78,7 +78,9 @@
         }
         echo  "<h1>".$resulat['ev_name']."</h1>";
         echo "<img id='img_event' src=".$resulat['ev_picture']." class='img-fluid'>";
+        echo "<br><p>";
         echo $resulat['ev_descriptive'];
+        echo "</p>";
       }
 
       $avg_rate = $bdd->prepare('SELECT AVG(ra_rating) AS moyenne FROM `rate` WHERE `ra_ev_id`= ?');
